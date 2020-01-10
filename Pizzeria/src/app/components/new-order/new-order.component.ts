@@ -27,7 +27,6 @@ export class NewOrderComponent implements OnInit {
   public totalAmout = 0;
   public orderId: number;
   public quantity = 1;
-  public itemId = 1;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatTable, { static: false }) public table: MatTable<any>;
   constructor(
@@ -50,7 +49,8 @@ export class NewOrderComponent implements OnInit {
       street: new FormControl('', [Validators.required]),
       place: new FormControl('', [Validators.required]),
       mobileNumber: new FormControl('', [Validators.required]),
-      pizza: new FormControl('', [Validators.required])
+      pizza: new FormControl('', [Validators.required]),
+      itemId: new FormControl('', [])
     });
   }
 
@@ -58,7 +58,7 @@ export class NewOrderComponent implements OnInit {
 
   public createOrder() {
      const order: Order = {
-       orderId: this.orderId,
+       orderId: this.newOrderFormGroup.controls.itemId.value,
        date: new Date(),
        orderItems: this.listOrderItems,
        phoneNumber: this.newOrderFormGroup.controls.mobileNumber.value,
@@ -71,7 +71,7 @@ export class NewOrderComponent implements OnInit {
   }
   public addPizza() {
     const quantity = this.quantity;
-    const itemId = this.itemId;
+    const itemId = this.newOrderFormGroup.controls.itemId.value;
     const pizza: Pizza = this.newOrderFormGroup.controls.pizza.value;
     const orderId = this.orderId;
     const orderItem: OrderItems = {
@@ -95,8 +95,7 @@ export class NewOrderComponent implements OnInit {
           }
         });
       } else {
-         this.itemId += 1;
-         orderItem.itemId += 1;
+         orderItem.itemId = this.newOrderFormGroup.controls.itemId.value;
          this.listOrderItems.push(orderItem);
          this.totalAmout += pizza.price;
       }
@@ -106,4 +105,11 @@ export class NewOrderComponent implements OnInit {
     }
     this.dataSource._updateChangeSubscription();
   }
+  public deleteRow(element: OrderItems) {
+    this.totalAmout -= element.pizza.price;
+    this.listOrderItems = this.listOrderItems.filter(i => i !== element);
+    this.dataSource =  new MatTableDataSource<any>(this.listOrderItems);
+    this.dataSource._updateChangeSubscription();
+  }
 }
+
