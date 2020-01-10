@@ -3,6 +3,8 @@ import { UserService } from 'app/services/user..service';
 import { User } from 'app/model/user';
 import { Order } from 'app/model/Order';
 import { MatTableDataSource, MatPaginator } from '@angular/material';
+import { OrderService } from 'app/services/order.service';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-list-orders',
@@ -12,37 +14,28 @@ import { MatTableDataSource, MatPaginator } from '@angular/material';
 export class ListOrdersComponent implements OnInit {
   public user: User;
   public displayedColumns: string[] = ['sifra', 'datum', 'iznos', 'akcija'];
-  public dataSource = new MatTableDataSource<any>(ELEMENT_DATA);
-  public listOrders: [Order];
+  public dataSource: any;
+  public listOrders: Order [] = new Array();
+  public newOrderFormGroup: FormGroup;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
-  constructor(protected userService: UserService) { }
+  constructor(
+    protected userService: UserService,
+    protected orederService: OrderService
+    ) { }
 
   ngOnInit() {
+    this.listOrders = this.orederService.getListOrder();
     this.user =  this.userService.currentUser;
+    this.dataSource = new MatTableDataSource<any>(this.listOrders);
     this.dataSource.paginator = this.paginator;
+    this.newOrderFormGroup = new FormGroup({
+      street: new FormControl('', [Validators.required]),
+      place: new FormControl('', [Validators.required]),
+      mobileNumber: new FormControl('', [Validators.required]),
+      pizza: new FormControl('', [Validators.required]),
+      itemId: new FormControl('', [])
+    });
   }
 
 }
-const ELEMENT_DATA: any[] = [
-  {position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H'},
-  {position: 2, name: 'Helium', weight: 4.0026, symbol: 'He'},
-  {position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li'},
-  {position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be'},
-  {position: 5, name: 'Boron', weight: 10.811, symbol: 'B'},
-  {position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C'},
-  {position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N'},
-  {position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O'},
-  {position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F'},
-  {position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne'},
-  {position: 11, name: 'Sodium', weight: 22.9897, symbol: 'Na'},
-  {position: 12, name: 'Magnesium', weight: 24.305, symbol: 'Mg'},
-  {position: 13, name: 'Aluminum', weight: 26.9815, symbol: 'Al'},
-  {position: 14, name: 'Silicon', weight: 28.0855, symbol: 'Si'},
-  {position: 15, name: 'Phosphorus', weight: 30.9738, symbol: 'P'},
-  {position: 16, name: 'Sulfur', weight: 32.065, symbol: 'S'},
-  {position: 17, name: 'Chlorine', weight: 35.453, symbol: 'Cl'},
-  {position: 18, name: 'Argon', weight: 39.948, symbol: 'Ar'},
-  {position: 19, name: 'Potassium', weight: 39.0983, symbol: 'K'},
-  {position: 20, name: 'Calcium', weight: 40.078, symbol: 'Ca'},
-];

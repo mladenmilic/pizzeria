@@ -20,6 +20,7 @@ import { ReviewOffersComponent } from './components/review-offers/review-offers.
 import {MatTableModule} from '@angular/material/table';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatSelectModule} from '@angular/material/select';
+import {CdkTableModule} from '@angular/cdk/table';
 @NgModule({
   declarations: [
     AppComponent,
@@ -42,7 +43,8 @@ import {MatSelectModule} from '@angular/material/select';
     MatToolbarModule,
     MatTableModule,
     MatPaginatorModule,
-    MatSelectModule
+    MatSelectModule,
+    CdkTableModule
   ],
   providers: [],
   bootstrap: [AppComponent]

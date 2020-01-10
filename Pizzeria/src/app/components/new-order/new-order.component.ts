@@ -8,8 +8,8 @@ import { PizzaService } from 'app/services/pizza.service';
 import { Place } from 'app/model/Place';
 import { Pizza } from 'app/model/Pizza';
 import { OrderItems } from 'app/model/orderItems';
-import { element } from 'protractor';
 import { Order } from 'app/model/Order';
+import { OrderService } from 'app/services/order.service';
 
 @Component({
   selector: 'app-new-order',
@@ -25,6 +25,7 @@ export class NewOrderComponent implements OnInit {
   public listPizza: Pizza [];
   public listOrderItems: OrderItems [] = new Array();
   public totalAmout = 0;
+  public itemId: number;
   public orderId: number;
   public quantity = 1;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
@@ -32,7 +33,8 @@ export class NewOrderComponent implements OnInit {
   constructor(
     protected userService: UserService,
     protected placeService: PlaceService,
-    protected pizzaService: PizzaService
+    protected pizzaService: PizzaService,
+    protected oredrService: OrderService
     ) {
 
   }
@@ -58,7 +60,7 @@ export class NewOrderComponent implements OnInit {
 
   public createOrder() {
      const order: Order = {
-       orderId: this.newOrderFormGroup.controls.itemId.value,
+       orderId: this.orderId,
        date: new Date(),
        orderItems: this.listOrderItems,
        phoneNumber: this.newOrderFormGroup.controls.mobileNumber.value,
@@ -67,7 +69,7 @@ export class NewOrderComponent implements OnInit {
        user: this.user,
        totalAmount: this.totalAmout
      }
-     console.log(order);
+     this.oredrService.addOrder(order);
   }
   public addPizza() {
     const quantity = this.quantity;
