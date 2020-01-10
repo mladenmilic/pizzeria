@@ -10,6 +10,5 @@ export class Order {
   public place: Place;
   public phoneNumber: string;
   public user: User;
-  public scope: number;
   public orderItems: [OrderItems];
 }
