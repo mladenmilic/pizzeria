@@ -32,7 +32,7 @@
               <button style="width: 20%;" class="btn btn-primary btn-sm">Dodaj picu</button>
           </div>
       </div>
-      <mat-card class="row">
+      <div class="row">
           <table class="col-md-12" mat-table [dataSource]="dataSource">
 
               <!-- Position Column -->
@@ -63,11 +63,11 @@
               <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
             </table>
 
-            <mat-paginator [pageSizeOptions]="[3,6,9]" showFirstLastButtons></mat-paginator>
-      </mat-card>
+            <mat-paginator  [pageSizeOptions]="[3,6,9]" showFirstLastButtons></mat-paginator>
+          </div>
       <mat-card-actions class="row">
-        <button class=" col-md-6 btn btn-primary btn-sm">Kreiraj porudžbinu</button>
-        <button  class="col-md-6 btn btn-secondary btn-sm">Odustani</button>
+        <button class=" col-md-2 btn btn-primary btn-sm">Kreiraj porudžbinu</button>
+        <button  style="float: right;" class="col-md-2 btn btn-secondary btn-sm">Odustani</button>
       </mat-card-actions>
   </mat-card>
 </div>
