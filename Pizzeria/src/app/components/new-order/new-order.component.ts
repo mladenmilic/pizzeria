@@ -2,7 +2,13 @@ import { UserService } from 'app/services/user..service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { User } from 'app/model/user';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { MatTableDataSource, MatPaginator } from '@angular/material';
+import { MatTableDataSource, MatPaginator, MatTable } from '@angular/material';
+import { PlaceService } from 'app/services/place.service';
+import { PizzaService } from 'app/services/pizza.service';
+import { Place } from 'app/model/Place';
+import { Pizza } from 'app/model/Pizza';
+import { OrderItems } from 'app/model/orderItems';
+import { element } from 'protractor';
 
 @Component({
   selector: 'app-new-order',
@@ -11,45 +17,82 @@ import { MatTableDataSource, MatPaginator } from '@angular/material';
 })
 export class NewOrderComponent implements OnInit {
   public user: User;
-  public orderForm: FormGroup;
-  public displayedColumns: string[] = ['sifra', 'datum', 'iznos', 'akcija'];
-  public dataSource = new MatTableDataSource<any>(ELEMENT_DATA);
+  public newOrderFormGroup: FormGroup;
+  public displayedColumns: string[] = ['redniBroj', 'nazivPice', 'kolicina', 'cena', 'iznos', 'akcija'];
+  public dataSource: any;
+  public listPlace: Place [];
+  public listPizza: Pizza [];
+  public listOrderItems: OrderItems [] = new Array();
+  public totalAmout = 0;
+  public orderId: number;
+  public quantity = 1;
+  public itemId = 1;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
-  constructor(protected userService: UserService) {
-    this.orderForm = new FormGroup({
-      username: new FormControl('', [Validators.required]),
-      password: new FormControl('', [Validators.required])
-    });
+  @ViewChild(MatTable, { static: false }) public table: MatTable<any>;
+  constructor(
+    protected userService: UserService,
+    protected placeService: PlaceService,
+    protected pizzaService: PizzaService
+    ) {
+
   }
 
   ngOnInit() {
     this.user = this.userService.currentUser;
+    this.dataSource =  new MatTableDataSource<any>(this.listOrderItems);
     this.dataSource.paginator = this.paginator;
+    this.listPlace = this.placeService.getListPlace();
+    this.listPizza = this.pizzaService.getListPizza();
+    // tslint:disable-next-line: no-bitwise
+    this.orderId = Math.random() * 1000000000 | 0;
+    this.newOrderFormGroup = new FormGroup({
+      street: new FormControl('', [Validators.required]),
+      place: new FormControl('', [Validators.required]),
+      mobileNumber: new FormControl('', [Validators.required]),
+      pizza: new FormControl('', [Validators.required])
+    });
   }
+
+
 
   public createOrder() {
-
+     console.log(this.newOrderFormGroup.value);
+  }
+  public addPizza() {
+    const quantity = this.quantity;
+    const itemId = this.itemId;
+    const pizza: Pizza = this.newOrderFormGroup.controls.pizza.value;
+    const orderId = this.orderId;
+    const orderItem: OrderItems = {
+      itemId,
+      orderId,
+      quantity,
+      price: pizza.price,
+      amount: quantity * pizza.price,
+      pizza
+    };
+    if (this.listOrderItems.length > 0) {
+      const a = this.listOrderItems.find((element) => {
+        return element.pizza.pizzaId === pizza.pizzaId;
+      });
+      if (a) {
+        this.listOrderItems.forEach((item) => {
+          if (item.pizza.pizzaId === a.pizza.pizzaId) {
+            item.quantity += 1;
+            item.amount += pizza.price;
+            this.totalAmout += pizza.price;
+          }
+        });
+      } else {
+         this.itemId += 1;
+         orderItem.itemId += 1;
+         this.listOrderItems.push(orderItem);
+         this.totalAmout += pizza.price;
+      }
+    } else {
+      this.listOrderItems.push(orderItem);
+      this.totalAmout += orderItem.amount;
+    }
+    this.dataSource._updateChangeSubscription();
   }
 }
-const ELEMENT_DATA: any[] = [
-  {position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H'},
-  {position: 2, name: 'Helium', weight: 4.0026, symbol: 'He'},
-  {position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li'},
-  {position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be'},
-  {position: 5, name: 'Boron', weight: 10.811, symbol: 'B'},
-  {position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C'},
-  {position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N'},
-  {position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O'},
-  {position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F'},
-  {position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne'},
-  {position: 11, name: 'Sodium', weight: 22.9897, symbol: 'Na'},
-  {position: 12, name: 'Magnesium', weight: 24.305, symbol: 'Mg'},
-  {position: 13, name: 'Aluminum', weight: 26.9815, symbol: 'Al'},
-  {position: 14, name: 'Silicon', weight: 28.0855, symbol: 'Si'},
-  {position: 15, name: 'Phosphorus', weight: 30.9738, symbol: 'P'},
-  {position: 16, name: 'Sulfur', weight: 32.065, symbol: 'S'},
-  {position: 17, name: 'Chlorine', weight: 35.453, symbol: 'Cl'},
-  {position: 18, name: 'Argon', weight: 39.948, symbol: 'Ar'},
-  {position: 19, name: 'Potassium', weight: 39.0983, symbol: 'K'},
-  {position: 20, name: 'Calcium', weight: 40.078, symbol: 'Ca'},
-];
