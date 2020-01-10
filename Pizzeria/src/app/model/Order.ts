@@ -10,5 +10,5 @@ export class Order {
   public place: Place;
   public phoneNumber: string;
   public user: User;
-  public orderItems: [OrderItems];
+  public orderItems: OrderItems [];
 }

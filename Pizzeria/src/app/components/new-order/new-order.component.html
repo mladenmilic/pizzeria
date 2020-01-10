@@ -35,7 +35,7 @@
                     <mat-error>Polje je obavezno</mat-error>
               </mat-form-field>
               <div class="col-md-5">
-                  <button style="width: 20%;" class="btn btn-primary btn-sm" (click)="addPizza()" >Dodaj picu</button>
+                  <button [disabled]="!newOrderFormGroup.valid" style="width: 20%;" class="btn btn-primary btn-sm" (click)="addPizza()" >Dodaj picu</button>
               </div>
           </div>
           <div [hidden]="listOrderItems.length == 0" class="row">
@@ -72,7 +72,9 @@
 
                   <ng-container matColumnDef="akcija">
                     <th mat-header-cell *matHeaderCellDef> Akcija </th>
-                    <td mat-cell *matCellDef="let element"> Nesto </td>
+                    <td mat-cell *matCellDef="let element">
+                      <img src="../../../assets/icons8-delete-bin-30.png">
+                    </td>
                   </ng-container>
 
                   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
@@ -82,8 +84,8 @@
                 <mat-paginator  [pageSizeOptions]="[3,6,9]" showFirstLastButtons></mat-paginator>
               </div>
           <mat-card-actions class="row">
-            <button class=" col-md-2 btn btn-primary btn-sm" (click)="createOrder()">Kreiraj porudžbinu</button>
-            <button  style="float: right;" class="col-md-2 btn btn-secondary btn-sm">Odustani</button>
+            <button [disabled]="!newOrderFormGroup.valid" class=" col-md-2 btn btn-primary btn-sm" (click)="createOrder()">Kreiraj porudžbinu</button>
+            <button  routerLink="/home" style="float: right;" class="col-md-2 btn btn-secondary btn-sm">Odustani</button>
           </mat-card-actions>
       </mat-card>
     </div>

@@ -9,6 +9,7 @@ import { Place } from 'app/model/Place';
 import { Pizza } from 'app/model/Pizza';
 import { OrderItems } from 'app/model/orderItems';
 import { element } from 'protractor';
+import { Order } from 'app/model/Order';
 
 @Component({
   selector: 'app-new-order',
@@ -56,7 +57,17 @@ export class NewOrderComponent implements OnInit {
 
 
   public createOrder() {
-     console.log(this.newOrderFormGroup.value);
+     const order: Order = {
+       orderId: this.orderId,
+       date: new Date(),
+       orderItems: this.listOrderItems,
+       phoneNumber: this.newOrderFormGroup.controls.mobileNumber.value,
+       place: this.newOrderFormGroup.controls.place.value,
+       street: this.newOrderFormGroup.controls.street.value,
+       user: this.user,
+       totalAmount: this.totalAmout
+     }
+     console.log(order);
   }
   public addPizza() {
     const quantity = this.quantity;
