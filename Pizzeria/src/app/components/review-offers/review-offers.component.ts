@@ -14,7 +14,7 @@ import { PizzaService } from 'app/services/pizza.service';
 export class ReviewOffersComponent implements OnInit {
   public pizzaFormGroup: FormGroup;
   public user: User;
-  public displayedColumns: string[] = ['sifra', 'datum', 'iznos', 'akcija'];
+  public displayedColumns: string[] = ['pizzaId', 'pizzaName', 'price', 'akcija'];
   public dataSource: any;
   public listPizza: Pizza [] = [];
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
