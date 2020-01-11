@@ -8,7 +8,7 @@
             <div class="col-md-2"></div>
           <div class="col-md-7">
         <mat-card-header class="row">
-          <h4 class=" text-center">Kreiranje ponude</h4>
+          <h4 class=" text-center">{{title}}</h4>
         </mat-card-header>
         <div style="margin-top: 3%" class="row">
             <mat-form-field class="col-md-10">
@@ -24,7 +24,8 @@
             </mat-form-field>
         </div>
         <mat-card-actions style="margin-top: 3%" class="row">
-            <button [disabled]="!createPizzaFormGroup.valid"  (click)="createPizza()" class=" col-md-3 btn btn-primary btn-sm">Kreiraj ponudu</button>
+            <button [hidden]="id != 0" [disabled]="!createPizzaFormGroup.valid"  (click)="createPizza()" class=" col-md-3 btn btn-primary btn-sm">Kreiraj ponudu</button>
+            <button [hidden]="id === 0" class=" col-md-3 btn btn-primary btn-sm" (click)="updatePizza()" >Promeni ponudu</button>
             <button  style="margin-left: 40%" class="col-md-2 btn btn-secondary btn-sm" routerLink="/review-offers">Odustani</button>
         </mat-card-actions>
         </div>

@@ -47,4 +47,14 @@ export class PizzaService {
   public getPizza(piazzaId: number): Pizza {
     return this.listPizza.filter(i => i.pizzaId === piazzaId)[0];
   }
+  public updatePizza(pizza: Pizza) {
+    this.listPizza.forEach((element) =>{
+      if(element.pizzaId === pizza.pizzaId) {
+        element.pizzaName = pizza.pizzaName;
+        element.description = pizza.description;
+        element.price = pizza.price;
+        return;
+      }
+    })
+  }
 }

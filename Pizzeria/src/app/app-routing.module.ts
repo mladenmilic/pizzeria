@@ -11,6 +11,7 @@ import { CreatePizzaComponent } from './components/create-pizza/create-pizza.com
 
 const routes: Routes = [
   { path: 'overview-pizza/:id', component: OverviewPizzaComponent},
+  { path: 'create-pizza/:id', component: CreatePizzaComponent},
   { path: 'create-pizza', component: CreatePizzaComponent},
   { path: 'review-offers', component: ReviewOffersComponent},
   { path: 'list-orders', component: ListOrdersComponent},

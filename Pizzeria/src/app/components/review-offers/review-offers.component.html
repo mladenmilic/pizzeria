@@ -51,7 +51,7 @@
                 <th mat-header-cell *matHeaderCellDef> Akcija </th>
                 <td mat-cell *matCellDef="let element">
                   <button mat-button [routerLink]="['/overview-pizza', element.pizzaId]"><img src="../../../assets/icons8-overview-26.png"></button>
-                  <button mat-button><img src="../../../assets/icons8-edit-property-30.png"></button>
+                  <button mat-button [routerLink]="['/create-pizza', element.pizzaId]"><img src="../../../assets/icons8-edit-property-30.png"></button>
                   <button mat-button (click)="deletOffer(element)"><img src="../../../assets/icons8-delete-bin-30.png"></button>
                 </td>
               </ng-container>
