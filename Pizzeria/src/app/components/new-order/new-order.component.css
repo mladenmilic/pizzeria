@@ -8,3 +8,7 @@
 table {
   width: 100%;
 }
+.title-center {
+  flex: 1 1 auto;
+  text-align: right;
+}

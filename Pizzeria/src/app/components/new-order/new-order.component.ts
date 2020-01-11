@@ -10,6 +10,7 @@ import { Pizza } from 'app/model/Pizza';
 import { OrderItems } from 'app/model/orderItems';
 import { Order } from 'app/model/Order';
 import { OrderService } from 'app/services/order.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-new-order',
@@ -34,7 +35,8 @@ export class NewOrderComponent implements OnInit {
     protected userService: UserService,
     protected placeService: PlaceService,
     protected pizzaService: PizzaService,
-    protected oredrService: OrderService
+    protected oredrService: OrderService,
+    protected route: Router
     ) {
 
   }
@@ -70,7 +72,7 @@ export class NewOrderComponent implements OnInit {
        totalAmount: this.totalAmout
      }
      this.oredrService.addOrder(order);
-     console.log(order);
+     this.route.navigate(['/list-orders']);
   }
   public addPizza() {
     const quantity = this.quantity;
