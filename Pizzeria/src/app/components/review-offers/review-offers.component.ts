@@ -32,7 +32,10 @@ export class ReviewOffersComponent implements OnInit {
     });
   }
   public filterByPrice() {
-
+    const priceFrom = +this.pizzaFormGroup.controls.priceFrom.value;
+    const priceTo = +this.pizzaFormGroup.controls.priceTo.value;
+    console.log(priceFrom, priceTo);
+    this.dataSource.data = this.pizzaService.filterByPrice(priceFrom, priceTo);
   }
   public deletOffer(element: Pizza) {
     this.pizzaService.deletePizza(element);

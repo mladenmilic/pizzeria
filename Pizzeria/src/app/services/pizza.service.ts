@@ -1,6 +1,7 @@
 import { Pizza } from './../model/Pizza';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
+import { filter } from 'minimatch';
 
 @Injectable({
   providedIn: 'root'
@@ -56,5 +57,25 @@ export class PizzaService {
         return;
       }
     })
+  }
+  public filterByPrice(priceFrom?: number, priceTo?: number): Pizza [] {
+   const filterListPizza: Pizza [] = [];
+   if (priceFrom && priceTo) {
+     this.listPizza.forEach((el) => {
+       if( el.price >= priceFrom || el.price <= priceTo) {
+         filterListPizza.push(el);
+       }
+     });
+   }
+   if(!priceFrom && priceTo) {
+    return this.listPizza.filter(i => i.price <= priceTo);
+   }
+   if(!priceTo && priceFrom) {
+    return this.listPizza.filter(i => i.price >= priceFrom);
+   }
+   if(!priceFrom && !priceTo) {
+     return this.getListPizza();
+   }
+   return filterListPizza;
   }
 }
