@@ -1,3 +1,4 @@
+import { OverviewOrderComponent } from './components/overview-order/overview-order.component';
 import { OverviewPizzaComponent } from './components/overview-pizza/overview-pizza.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
@@ -10,6 +11,7 @@ import { CreatePizzaComponent } from './components/create-pizza/create-pizza.com
 
 
 const routes: Routes = [
+  { path: 'overview-order/:id', component: OverviewOrderComponent},
   { path: 'overview-pizza/:id', component: OverviewPizzaComponent},
   { path: 'create-pizza/:id', component: CreatePizzaComponent},
   { path: 'create-pizza', component: CreatePizzaComponent},
