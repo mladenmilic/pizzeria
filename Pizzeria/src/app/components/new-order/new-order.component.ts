@@ -70,6 +70,7 @@ export class NewOrderComponent implements OnInit {
        totalAmount: this.totalAmout
      }
      this.oredrService.addOrder(order);
+     console.log(order);
   }
   public addPizza() {
     const quantity = this.quantity;

@@ -7,28 +7,32 @@
           </mat-card-header>
           <div class="row">
             <mat-form-field class="col-md-3">
-              <input matInput [formControl]="newOrderFormGroup.controls['street']" placeholder="Datum od">
+              <input  matInput [formControl]="newOrderFormGroup.controls['dateFrom']" [matDatepicker]="picker1" placeholder="Datum od">
+              <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+              <mat-datepicker #picker1></mat-datepicker>
             </mat-form-field>
             <mat-form-field class="col-md-3">
-                <input matInput [formControl]="newOrderFormGroup.controls['mobileNumber']" placeholder="Datum do">
+              <input matInput [formControl]="newOrderFormGroup.controls['dateTo']"  [matDatepicker]="picker2" placeholder="Datum do">
+              <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+              <mat-datepicker #picker2></mat-datepicker>
             </mat-form-field>
-            <div class="col-md-2">
-             <button class="btn btn-primary btn-sm">Pretrazi po datumu</button>
+            <div style="margin-top: 1.5%" class="col-md-2">
+             <button class="btn btn-primary btn-sm" (click)="filterByDate()">Pretrazi po datumu</button>
             </div>
           </div>
           <div class="row">
             <div class="col-md-12">
               <div class="row">
                 <mat-form-field class="col-md-3">
-                  <input matInput [formControl]="newOrderFormGroup.controls['street']" placeholder="Šifra porudžbine">
+                  <input matInput [formControl]="newOrderFormGroup.controls['orderId']" placeholder="Šifra porudžbine">
                 </mat-form-field>
-                <div class="col-md-2">
-                <button class="btn btn-primary btn-sm btn-block">Pretrazi po šifri</button>
+                <div style="margin-top: 1.5%" class="col-md-2">
+                <button class="btn btn-primary btn-sm btn-block" (click)="filterByOrderId()">Pretrazi po šifri</button>
                 </div>
               </div>
             </div>
           </div>
-          <table  mat-table [dataSource]="dataSource">
+          <table style="margin-top: 1.5%"  mat-table [dataSource]="dataSource">
 
             <!-- Position Column -->
             <ng-container matColumnDef="sifra">
@@ -51,7 +55,11 @@
             <!-- Symbol Column -->
             <ng-container matColumnDef="akcija">
               <th mat-header-cell *matHeaderCellDef> Akcija </th>
-              <td mat-cell *matCellDef="let element"> Nesto </td>
+              <td mat-cell *matCellDef="let element">
+                <button mat-button><img src="../../../assets/icons8-overview-26.png"></button>
+                <button mat-button><img src="../../../assets/icons8-edit-property-30.png"></button>
+                <button mat-button><img src="../../../assets/icons8-delete-bin-30.png"></button>
+              </td>
             </ng-container>
 
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

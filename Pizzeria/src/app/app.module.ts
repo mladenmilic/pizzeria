@@ -21,6 +21,8 @@ import {MatTableModule} from '@angular/material/table';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatSelectModule} from '@angular/material/select';
 import {CdkTableModule} from '@angular/cdk/table';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatNativeDateModule} from '@angular/material';
 @NgModule({
   declarations: [
     AppComponent,
@@ -44,7 +46,9 @@ import {CdkTableModule} from '@angular/cdk/table';
     MatTableModule,
     MatPaginatorModule,
     MatSelectModule,
-    CdkTableModule
+    CdkTableModule,
+    MatDatepickerModule,
+    MatNativeDateModule
   ],
   providers: [],
   bootstrap: [AppComponent]

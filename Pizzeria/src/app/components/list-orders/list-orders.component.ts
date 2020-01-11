@@ -5,6 +5,7 @@ import { Order } from 'app/model/Order';
 import { MatTableDataSource, MatPaginator } from '@angular/material';
 import { OrderService } from 'app/services/order.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { OrderItems } from 'app/model/orderItems';
 
 @Component({
   selector: 'app-list-orders',
@@ -15,7 +16,7 @@ export class ListOrdersComponent implements OnInit {
   public user: User;
   public displayedColumns: string[] = ['sifra', 'datum', 'iznos', 'akcija'];
   public dataSource: any;
-  public listOrders: Order [] = new Array();
+  public listOrders: Order [] = []
   public newOrderFormGroup: FormGroup;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
@@ -30,12 +31,20 @@ export class ListOrdersComponent implements OnInit {
     this.dataSource = new MatTableDataSource<any>(this.listOrders);
     this.dataSource.paginator = this.paginator;
     this.newOrderFormGroup = new FormGroup({
-      street: new FormControl('', [Validators.required]),
-      place: new FormControl('', [Validators.required]),
-      mobileNumber: new FormControl('', [Validators.required]),
-      pizza: new FormControl('', [Validators.required]),
-      itemId: new FormControl('', [])
+      dateFrom: new FormControl(),
+      dateTo: new FormControl(),
+      orderId: new FormControl()
     });
   }
 
+  public filterByDate() {
+    const dateFrom = this.newOrderFormGroup.controls.dateFrom.value;
+    const dateTo = this.newOrderFormGroup.controls.dateFrom.value;
+    console.log(dateFrom);
+    console.log(dateTo);
+  }
+  public filterByOrderId() {
+    const orderId = this.newOrderFormGroup.controls.orderId.value;
+    console.log(orderId);
+  }
 }
