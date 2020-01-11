@@ -2,7 +2,7 @@ import { FormGroup, FormControl } from '@angular/forms';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { User } from 'app/model/user';
 import { Pizza } from 'app/model/Pizza';
-import { MatPaginator, MatTableDataSource } from '@angular/material';
+import { MatPaginator, MatTableDataSource, MatTable } from '@angular/material';
 import { UserService } from 'app/services/user..service';
 import { PizzaService } from 'app/services/pizza.service';
 
@@ -18,7 +18,7 @@ export class ReviewOffersComponent implements OnInit {
   public dataSource: any;
   public listPizza: Pizza [] = [];
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
-
+  @ViewChild(MatTable, { static: false }) public table: MatTable<any>;
   constructor(protected userService: UserService, protected pizzaService: PizzaService) { }
 
   ngOnInit() {
@@ -31,5 +31,11 @@ export class ReviewOffersComponent implements OnInit {
       priceTo: new FormControl()
     });
   }
-  public filterByPrice() {}
+  public filterByPrice() {
+
+  }
+  public deletOffer(element: Pizza) {
+    this.pizzaService.deletePizza(element);
+    this.dataSource.data = this.pizzaService.getListPizza();
+  }
 }

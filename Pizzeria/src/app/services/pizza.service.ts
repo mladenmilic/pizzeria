@@ -1,5 +1,6 @@
 import { Pizza } from './../model/Pizza';
 import { Injectable } from '@angular/core';
+import { Observable, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -36,5 +37,8 @@ export class PizzaService {
 
   public getListPizza(): Pizza [] {
     return this.listPizza;
+  }
+  public deletePizza(pizza: Pizza) {
+    this.listPizza = this.listPizza.filter(i => i !== pizza);
   }
 }

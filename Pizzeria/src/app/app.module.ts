@@ -23,6 +23,8 @@ import {MatSelectModule} from '@angular/material/select';
 import {CdkTableModule} from '@angular/cdk/table';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatNativeDateModule} from '@angular/material';
+import { OverviewPizzaComponent } from './components/overview-pizza/overview-pizza.component';
+import { CreatePizzaComponent } from './components/create-pizza/create-pizza.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -30,7 +32,9 @@ import {MatNativeDateModule} from '@angular/material';
     HomeComponent,
     NewOrderComponent,
     ListOrdersComponent,
-    ReviewOffersComponent
+    ReviewOffersComponent,
+    OverviewPizzaComponent,
+    CreatePizzaComponent
   ],
   imports: [
     BrowserModule,

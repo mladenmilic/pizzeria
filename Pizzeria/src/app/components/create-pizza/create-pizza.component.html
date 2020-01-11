@@ -1,0 +1,36 @@
+<mat-toolbar><span class="title-center">Zaposleni: {{user.fullName}}</span></mat-toolbar>
+<form [formGroup]="createPizzaFormGroup">
+  <mat-card class="container">
+    <div class="row">
+      <div class="col-md-2"></div>
+      <div class="col-md-10">
+        <div class="row">
+            <div class="col-md-2"></div>
+          <div class="col-md-7">
+        <mat-card-header class="row">
+          <h4 class=" text-center">Kreiranje ponude</h4>
+        </mat-card-header>
+        <div class="row">
+            <mat-form-field class="col-md-10">
+              <input  [formControl]="createPizzaFormGroup.controls['pizzaName']" required matInput placeholder="Naziv pice">
+            </mat-form-field>
+
+            <mat-form-field class="col-md-10">
+              <textarea rows="4" cols="50" [formControl]="createPizzaFormGroup.controls['description']" required matInput placeholder="Opis"></textarea>
+            </mat-form-field>
+
+            <mat-form-field class="col-md-10">
+                <input  [formControl]="createPizzaFormGroup.controls['price']" required matInput placeholder="Cena">
+            </mat-form-field>
+        </div>
+        <mat-card-actions class="row">
+            <button  class=" col-md-3 btn btn-primary btn-sm">Kreiraj ponudu</button>
+            <button  style="margin-left: 40%" class="col-md-2 btn btn-secondary btn-sm" routerLink="/review-offers">Odustani</button>
+        </mat-card-actions>
+        </div>
+        <div class="col-md-2"></div>
+        </div>
+       </div>
+    </div>
+  </mat-card>
+</form>
