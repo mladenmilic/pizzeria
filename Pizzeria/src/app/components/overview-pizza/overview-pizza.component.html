@@ -1,1 +1,33 @@
-<p>overview-pizza works!</p>
+<mat-toolbar><span class="title-center">Zaposleni: {{user.fullName}}</span></mat-toolbar>
+  <mat-card  class="container">
+    <div style="margin-top: 1.5%" class="row">
+      <div class="col-md-2"></div>
+      <div class="col-md-10">
+        <div class="row">
+            <div class="col-md-2"></div>
+          <div class="col-md-7">
+        <mat-card-header class="row">
+          <h4 class=" text-center">Pregled ponude</h4>
+        </mat-card-header>
+        <div style="margin-top: 3%" class="row">
+            <mat-form-field class="col-md-10">
+              <input [value]="pizza.pizzaName" matInput placeholder="Naziv pice" readonly>
+            </mat-form-field>
+
+            <mat-form-field class="col-md-10">
+              <textarea [value]="pizza.description" rows="1" cols="50" matInput placeholder="Opis" readonly></textarea>
+            </mat-form-field>
+
+            <mat-form-field class="col-md-10">
+                <input [value]="pizza.price" matInput placeholder="Cena" readonly>
+            </mat-form-field>
+        </div>
+        <mat-card-actions style="margin-top: 3%" class="row">
+            <button class="col-md-10 btn btn-secondary btn-sm" routerLink="/review-offers">Zatvori</button>
+        </mat-card-actions>
+        </div>
+        <div class="col-md-2"></div>
+        </div>
+       </div>
+    </div>
+  </mat-card>

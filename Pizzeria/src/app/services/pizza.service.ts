@@ -41,4 +41,10 @@ export class PizzaService {
   public deletePizza(pizza: Pizza) {
     this.listPizza = this.listPizza.filter(i => i !== pizza);
   }
+  public createPizza(pizza: Pizza) {
+    this.listPizza.push(pizza);
+  }
+  public getPizza(piazzaId: number): Pizza {
+    return this.listPizza.filter(i => i.pizzaId === piazzaId)[0];
+  }
 }
