@@ -11,7 +11,7 @@ import { OrderItems } from 'app/model/orderItems';
 import { Order } from 'app/model/Order';
 import { OrderService } from 'app/services/order.service';
 import { Router } from '@angular/router';
-
+import { DatePipe } from '@angular/common';
 @Component({
   selector: 'app-new-order',
   templateUrl: './new-order.component.html',
@@ -36,7 +36,8 @@ export class NewOrderComponent implements OnInit {
     protected placeService: PlaceService,
     protected pizzaService: PizzaService,
     protected oredrService: OrderService,
-    protected route: Router
+    protected route: Router,
+    protected datePipe: DatePipe
     ) {
 
   }

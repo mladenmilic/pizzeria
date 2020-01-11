@@ -25,6 +25,8 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatNativeDateModule} from '@angular/material';
 import { OverviewPizzaComponent } from './components/overview-pizza/overview-pizza.component';
 import { CreatePizzaComponent } from './components/create-pizza/create-pizza.component';
+import { OverviewOrderComponent } from './components/overview-order/overview-order.component';
+import { DatePipe } from '@angular/common';
 @NgModule({
   declarations: [
     AppComponent,
@@ -34,7 +36,8 @@ import { CreatePizzaComponent } from './components/create-pizza/create-pizza.com
     ListOrdersComponent,
     ReviewOffersComponent,
     OverviewPizzaComponent,
-    CreatePizzaComponent
+    CreatePizzaComponent,
+    OverviewOrderComponent
   ],
   imports: [
     BrowserModule,
@@ -54,7 +57,9 @@ import { CreatePizzaComponent } from './components/create-pizza/create-pizza.com
     MatDatepickerModule,
     MatNativeDateModule
   ],
-  providers: [],
+  providers: [
+    DatePipe
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
