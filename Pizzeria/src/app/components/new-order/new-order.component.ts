@@ -26,7 +26,7 @@ export class NewOrderComponent implements OnInit {
   public listPizza: Pizza [];
   public listOrderItems: OrderItems [] = new Array();
   public totalAmout = 0;
-  public itemId = 0;
+  public itemId = 1;
   public orderId: number;
   public quantity = 1;
   public title = 'Kreiranje porudžbine';
@@ -84,7 +84,7 @@ export class NewOrderComponent implements OnInit {
   }
   public addPizza() {
     const quantity = this.quantity;
-    //const itemId = this.newOrderFormGroup.controls.itemId.value;
+    const itemId = this.itemId;
     const pizza: Pizza = this.newOrderFormGroup.controls.pizza.value;
     const orderId = this.orderId;
     const orderItem: OrderItems = {
@@ -105,24 +105,29 @@ export class NewOrderComponent implements OnInit {
             item.quantity += 1;
             item.amount += pizza.price;
             this.totalAmout += pizza.price;
+            return;
           }
         });
       } else {
-         // orderItem.itemId = this.newOrderFormGroup.controls.itemId.value;
+         ++this.itemId;
          orderItem.itemId = this.itemId;
          this.listOrderItems.push(orderItem);
          this.totalAmout += pizza.price;
       }
     } else {
-      this.listOrderItems.push(orderItem);
-      this.totalAmout += orderItem.amount;
+       this.itemId = 1;
+       orderItem.itemId  = this.itemId;
+       this.listOrderItems.push(orderItem);
+       this.totalAmout += orderItem.amount;
     }
     this.dataSource._updateChangeSubscription();
   }
   public deleteRow(element: OrderItems) {
     this.totalAmout -= element.pizza.price;
     this.listOrderItems = this.listOrderItems.filter(i => i !== element);
+    this.listOrderItems = this.fixListOrderItems(this.listOrderItems);
     this.dataSource =  new MatTableDataSource<any>(this.listOrderItems);
+    this.dataSource.paginator = this.paginator;
     this.dataSource._updateChangeSubscription();
   }
   public updateOrder() {
@@ -149,6 +154,32 @@ export class NewOrderComponent implements OnInit {
     this.newOrderFormGroup.controls.place.setValue(this.listPlace.find(i => i.zipCode === order.place.zipCode));
     this.newOrderFormGroup.controls.street.setValue(order.street);
     this.newOrderFormGroup.controls.mobileNumber.setValue(order.phoneNumber);
+  }
+  private fixListOrderItems(listOrderItems: OrderItems []) {
+   if(listOrderItems.length === 1) {
+     listOrderItems[0].itemId = 1;
+     this.itemId = 1;
+     return listOrderItems;
+   }
+   if(!listOrderItems) {
+     this.itemId = 1;
+     return new Array ();
+   }
+   // tslint:disable-next-line:prefer-for-of
+   for (let i = 0; i < listOrderItems.length; i++) {
+    for (let j = 1; j < listOrderItems.length; j++) {
+      if (( listOrderItems[j].itemId -  listOrderItems[i].itemId === 2) || (listOrderItems[i].itemId - listOrderItems[i].itemId === -2)) {
+        if (listOrderItems[i].itemId === 1) {
+          listOrderItems[j].itemId -= 1;
+        } else {
+          listOrderItems[i].itemId -= 1;
+          listOrderItems[j].itemId -= 1;
+          this.itemId = listOrderItems[j].itemId;
+        }
+      }
+    }
+   }
+   return listOrderItems;
   }
 }
 
