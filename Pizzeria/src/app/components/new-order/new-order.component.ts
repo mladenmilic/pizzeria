@@ -26,7 +26,7 @@ export class NewOrderComponent implements OnInit {
   public listPizza: Pizza [];
   public listOrderItems: OrderItems [] = new Array();
   public totalAmout = 0;
-  public itemId: number;
+  public itemId = 0;
   public orderId: number;
   public quantity = 1;
   public title = 'Kreiranje porudžbine';
@@ -84,11 +84,11 @@ export class NewOrderComponent implements OnInit {
   }
   public addPizza() {
     const quantity = this.quantity;
-    const itemId = this.newOrderFormGroup.controls.itemId.value;
+    //const itemId = this.newOrderFormGroup.controls.itemId.value;
     const pizza: Pizza = this.newOrderFormGroup.controls.pizza.value;
     const orderId = this.orderId;
     const orderItem: OrderItems = {
-      itemId,
+      itemId: this.itemId,
       orderId,
       quantity,
       price: pizza.price,
@@ -108,7 +108,8 @@ export class NewOrderComponent implements OnInit {
           }
         });
       } else {
-         orderItem.itemId = this.newOrderFormGroup.controls.itemId.value;
+         // orderItem.itemId = this.newOrderFormGroup.controls.itemId.value;
+         orderItem.itemId = this.itemId;
          this.listOrderItems.push(orderItem);
          this.totalAmout += pizza.price;
       }
@@ -124,12 +125,27 @@ export class NewOrderComponent implements OnInit {
     this.dataSource =  new MatTableDataSource<any>(this.listOrderItems);
     this.dataSource._updateChangeSubscription();
   }
+  public updateOrder() {
+    const order: Order = {
+      orderId: this.id,
+      date: new Date(),
+      orderItems: this.listOrderItems,
+      phoneNumber: this.newOrderFormGroup.controls.mobileNumber.value,
+      place: this.newOrderFormGroup.controls.place.value,
+      street: this.newOrderFormGroup.controls.street.value,
+      user: this.user,
+      totalAmount: this.totalAmout
+    }
+    this.oredrService.updateOrder(order);
+    this.route.navigate(['/list-orders']);
+  }
   private changeAndPopulateForm() {
     this.title = 'Izmena porudžbine';
     const order: Order = this.oredrService.getOrder(this.id);
     this.totalAmout = order.totalAmount;
     this.listOrderItems = order.orderItems;
     this.dataSource = new MatTableDataSource<any>(this.listOrderItems);
+    this.dataSource.paginator = this.paginator;
     this.newOrderFormGroup.controls.place.setValue(this.listPlace.find(i => i.zipCode === order.place.zipCode));
     this.newOrderFormGroup.controls.street.setValue(order.street);
     this.newOrderFormGroup.controls.mobileNumber.setValue(order.phoneNumber);

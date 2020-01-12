@@ -133,4 +133,19 @@ export class OrderService {
   public deleteOrder(order: Order) {
     this.listOrder = this.listOrder.filter(i => i.orderId !== order.orderId);
   }
+  public updateOrder(order: Order) {
+    console.log(order);
+    this.listOrder.forEach((element) => {
+      if (element.orderId === order.orderId) {
+        element.place = order.place;
+        element.street = order.street;
+        element.totalAmount = order.totalAmount;
+        element.user = order.user;
+        element.date = order.date;
+        element.orderItems = order.orderItems;
+        element.phoneNumber = order.phoneNumber;
+        return;
+      }
+    });
+  }
 }
