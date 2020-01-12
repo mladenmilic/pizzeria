@@ -16,7 +16,7 @@ export class OrderService {
         township: 'Stari grad'
       },
       street: 'Nemanjina 123',
-      totalAmount: 350,
+      totalAmount: 640,
       orderItems:[
         {
           orderId: 1,
@@ -106,6 +106,9 @@ export class OrderService {
   public getListOrder() {
     return this.listOrder;
   }
+  public getOrder(orderId): Order {
+    return this.listOrder.find( i => i.orderId === orderId);
+  }
   public addOrder(order: Order) {
     this.listOrder.push(order);
   }
@@ -126,5 +129,8 @@ export class OrderService {
         this.listOrder.filter(i => i.date >= dateFrom);
       }
       return this.listOrder.filter(i => i.date >= dateFrom && i.date <= dateTo);
+  }
+  public deleteOrder(order: Order) {
+    this.listOrder = this.listOrder.filter(i => i.orderId !== order.orderId);
   }
 }

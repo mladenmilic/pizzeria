@@ -2,7 +2,7 @@
   <form [formGroup] = "newOrderFormGroup">
     <div class=" container row">
       <mat-card class="col-md-12">
-        <mat-card-header class="row">
+        <mat-card-header style="margin-bottom: 3%" class="row">
             <h4 class=" text-center">Pregled porudžbine</h4>
         </mat-card-header>
         <div class="row">
@@ -10,28 +10,20 @@
             <input matInput [formControl]="newOrderFormGroup.controls['street']" readonly placeholder="Ulica">
           </mat-form-field>
           <mat-form-field  class="col-md-4">
-            <mat-select [formControl]="newOrderFormGroup.controls['place']" required placeholder="Opština">
-              <mat-option  *ngFor="let place of listPlace" [value] = "place">{{place.township}}</mat-option>
-            </mat-select>
-            <mat-error>Polje je obavezno</mat-error>
+            <input matInput [formControl]="newOrderFormGroup.controls['place']" readonly placeholder="Opština">
           </mat-form-field>
         </div>
         <div class="row">
             <mat-form-field class="col-md-4">
-              <input matInput [formControl]="newOrderFormGroup.controls['mobileNumber']" required placeholder="Broj telefona">
+              <input matInput [formControl]="newOrderFormGroup.controls['mobileNumber']"  placeholder="Broj telefona">
             </mat-form-field>
-            <div class="col-md-4">
-                <label>Ukupan iznos</label>
-                <input matInput [value]="totalAmout" readonly>
-            </div>
-          </div>
-          <div class="row">
-              <mat-form-field class="col-md-4">
-                  <mat-select [formControl]="newOrderFormGroup.controls['pizza']" required placeholder="Vrsta pice">
-                      <mat-option *ngFor="let pizza of listPizza" [value]="pizza">{{pizza.pizzaName}}</mat-option>
-                    </mat-select>
+            <mat-form-field  class="col-md-2">
+                <input matInput [value]="totalAmout" placeholder="Ukupan iznos">
               </mat-form-field>
           </div>
+          <mat-card-header style="margin-top: 3%" class="row">
+              <h4 class=" text-center">Stavke porudžbine</h4>
+          </mat-card-header>
           <div [hidden]="dataSource.data.length == 0" class="row">
               <table #table  class="col-md-12" mat-table [dataSource]="dataSource">
                   <ng-container matColumnDef="redniBroj">
@@ -62,7 +54,7 @@
                   <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
                 </table>
 
-                <mat-paginator  [pageSizeOptions]="[3,6,9]" showFirstLastButtons></mat-paginator>
+                <mat-paginator  [pageSizeOptions]="[2]" showFirstLastButtons></mat-paginator>
               </div>
           <mat-card-actions class="row">
             <div class="col-md-12 ">

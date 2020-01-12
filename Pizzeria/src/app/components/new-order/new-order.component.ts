@@ -10,7 +10,7 @@ import { Pizza } from 'app/model/Pizza';
 import { OrderItems } from 'app/model/orderItems';
 import { Order } from 'app/model/Order';
 import { OrderService } from 'app/services/order.service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { DatePipe } from '@angular/common';
 @Component({
   selector: 'app-new-order',
@@ -29,6 +29,8 @@ export class NewOrderComponent implements OnInit {
   public itemId: number;
   public orderId: number;
   public quantity = 1;
+  public title = 'Kreiranje porudžbine';
+  public id: number;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatTable, { static: false }) public table: MatTable<any>;
   constructor(
@@ -37,7 +39,8 @@ export class NewOrderComponent implements OnInit {
     protected pizzaService: PizzaService,
     protected oredrService: OrderService,
     protected route: Router,
-    protected datePipe: DatePipe
+    protected datePipe: DatePipe,
+    protected router: ActivatedRoute
     ) {
 
   }
@@ -57,6 +60,10 @@ export class NewOrderComponent implements OnInit {
       pizza: new FormControl('', [Validators.required]),
       itemId: new FormControl('', [])
     });
+    this.id = +this.router.snapshot.paramMap.get('id');
+    if(this.id > 0) {
+      this.changeAndPopulateForm();
+    }
   }
 
 
@@ -116,6 +123,16 @@ export class NewOrderComponent implements OnInit {
     this.listOrderItems = this.listOrderItems.filter(i => i !== element);
     this.dataSource =  new MatTableDataSource<any>(this.listOrderItems);
     this.dataSource._updateChangeSubscription();
+  }
+  private changeAndPopulateForm() {
+    this.title = 'Izmena porudžbine';
+    const order: Order = this.oredrService.getOrder(this.id);
+    this.totalAmout = order.totalAmount;
+    this.listOrderItems = order.orderItems;
+    this.dataSource = new MatTableDataSource<any>(this.listOrderItems);
+    this.newOrderFormGroup.controls.place.setValue(this.listPlace.find(i => i.zipCode === order.place.zipCode));
+    this.newOrderFormGroup.controls.street.setValue(order.street);
+    this.newOrderFormGroup.controls.mobileNumber.setValue(order.phoneNumber);
   }
 }
 

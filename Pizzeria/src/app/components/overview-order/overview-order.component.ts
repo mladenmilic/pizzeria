@@ -9,8 +9,9 @@ import { UserService } from 'app/services/user..service';
 import { PlaceService } from 'app/services/place.service';
 import { PizzaService } from 'app/services/pizza.service';
 import { OrderService } from 'app/services/order.service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { DatePipe } from '@angular/common';
+import { Order } from 'app/model/Order';
 
 @Component({
   selector: 'app-overview-order',
@@ -18,18 +19,12 @@ import { DatePipe } from '@angular/common';
   styleUrls: ['./overview-order.component.css']
 })
 export class OverviewOrderComponent implements OnInit {
-
   public user: User;
   public newOrderFormGroup: FormGroup;
   public displayedColumns: string[] = ['redniBroj', 'nazivPice', 'kolicina', 'cena', 'iznos'];
   public dataSource: any;
-  public listPlace: Place [];
-  public listPizza: Pizza [];
   public listOrderItems: OrderItems [] = new Array();
   public totalAmout = 0;
-  public itemId: number;
-  public orderId: number;
-  public quantity = 1;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatTable, { static: false }) public table: MatTable<any>;
   constructor(
@@ -38,7 +33,8 @@ export class OverviewOrderComponent implements OnInit {
     protected pizzaService: PizzaService,
     protected oredrService: OrderService,
     protected route: Router,
-    protected datePipe: DatePipe
+    protected datePipe: DatePipe,
+    protected router: ActivatedRoute
     ) {
 
   }
@@ -50,10 +46,18 @@ export class OverviewOrderComponent implements OnInit {
     this.newOrderFormGroup = new FormGroup({
       street: new FormControl('', [Validators.required]),
       place: new FormControl('', [Validators.required]),
-      mobileNumber: new FormControl('', [Validators.required]),
-      pizza: new FormControl('', [Validators.required]),
-      itemId: new FormControl('', [])
+      mobileNumber: new FormControl('', [Validators.required])
     });
+    this.populateForm();
   }
 
+  private populateForm() {
+    const id = +this.router.snapshot.paramMap.get('id');
+    const order: Order = this.oredrService.getOrder(id);
+    this.newOrderFormGroup.controls.street.setValue(order.street);
+    this.newOrderFormGroup.controls.place.setValue(order.place.township);
+    this.newOrderFormGroup.controls.mobileNumber.setValue(order.phoneNumber);
+    this.totalAmout = order.totalAmount;
+    this.dataSource.data = order.orderItems;
+  }
 }

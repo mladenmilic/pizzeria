@@ -7,6 +7,7 @@ import { OrderService } from 'app/services/order.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { OrderItems } from 'app/model/orderItems';
 import { DatePipe } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-list-orders',
@@ -24,7 +25,8 @@ export class ListOrdersComponent implements OnInit {
   constructor(
     protected userService: UserService,
     protected orederService: OrderService,
-    protected datePipe: DatePipe
+    protected datePipe: DatePipe,
+    protected route: Router
     ) { }
 
   ngOnInit() {
@@ -50,5 +52,15 @@ export class ListOrdersComponent implements OnInit {
   public filterByOrderId() {
     const orderId = +this.newOrderFormGroup.controls.orderId.value;
     this.dataSource.data = this.orederService.filterByOrderId(orderId);
+  }
+  public overviewOrders(orderId: number) {
+    this.route.navigate(['/overview-order/' + orderId]);
+  }
+  public editOrder(orderId: number) {
+    this.route.navigate(['/new-order/' + orderId]);
+  }
+  public deleteOrder(order: Order) {
+    this.orederService.deleteOrder(order);
+    this.dataSource.data = this.orederService.getListOrder();
   }
 }

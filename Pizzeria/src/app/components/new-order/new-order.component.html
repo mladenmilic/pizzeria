@@ -3,7 +3,7 @@
     <div class=" container row">
       <mat-card class="col-md-12">
         <mat-card-header class="row">
-            <h4 class=" text-center">Kreiranje porudžbine</h4>
+            <h4 class=" text-center">{{title}}</h4>
         </mat-card-header>
         <div class="row">
           <mat-form-field class="col-md-4">
@@ -22,10 +22,9 @@
               <input matInput [formControl]="newOrderFormGroup.controls['mobileNumber']" required placeholder="Broj telefona">
               <mat-error>Polje je obavezno</mat-error>
             </mat-form-field>
-            <div class="col-md-4">
-                <label>Ukupan iznos</label>
-                <input matInput [value]="totalAmout" readonly>
-            </div>
+            <mat-form-field class="col-md-2">
+                <input matInput [value]="totalAmout" readonly placeholder="Ukupan iznos">
+              </mat-form-field>
           </div>
           <div class="row">
               <mat-form-field class="col-md-4">
@@ -34,11 +33,14 @@
                     </mat-select>
                     <mat-error>Polje je obavezno</mat-error>
               </mat-form-field>
-              <div class="col-md-5">
+              <div style="margin-top: 1.5%" class="col-md-5">
                   <button [disabled]="!newOrderFormGroup.valid" style="width: 20%;" class="btn btn-primary btn-sm" (click)="addPizza()" >Dodaj picu</button>
               </div>
           </div>
           <div [hidden]="dataSource.data.length == 0" class="row">
+              <mat-card-header style="margin-top: 3%" class="row">
+                  <h4 class=" text-center">Stavke porudžbine</h4>
+              </mat-card-header>
               <table #table  class="col-md-12" mat-table [dataSource]="dataSource">
                   <ng-container matColumnDef="redniBroj">
                     <th  mat-header-cell *matHeaderCellDef>Redni broj stavke</th>
@@ -80,7 +82,8 @@
                 <mat-paginator  [pageSizeOptions]="[3,6,9]" showFirstLastButtons></mat-paginator>
               </div>
           <mat-card-actions class="row">
-            <button [disabled]="!newOrderFormGroup.valid || dataSource.data.length == 0" class=" col-md-2 btn btn-primary btn-sm" (click)="createOrder()">Kreiraj porudžbinu</button>
+            <button [hidden]="id !==0" [disabled]="!newOrderFormGroup.valid || dataSource.data.length == 0" class=" col-md-2 btn btn-primary btn-sm" (click)="createOrder()">Kreiraj porudžbinu</button>
+            <button [hidden]="id == 0 " [disabled]="dataSource.data.length == 0" class=" col-md-2 btn btn-primary btn-sm">Izmeni porudžbinu</button>
             <button  routerLink="/home" style="float: right;" class="col-md-2 btn btn-secondary btn-sm">Odustani</button>
           </mat-card-actions>
       </mat-card>

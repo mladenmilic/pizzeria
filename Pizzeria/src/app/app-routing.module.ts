@@ -17,6 +17,7 @@ const routes: Routes = [
   { path: 'create-pizza', component: CreatePizzaComponent},
   { path: 'review-offers', component: ReviewOffersComponent},
   { path: 'list-orders', component: ListOrdersComponent},
+  { path: 'new-order/:id', component: NewOrderComponent},
   { path: 'new-order', component: NewOrderComponent},
   { path: 'login', component: LoginComponent },
   { path: 'home', component: HomeComponent },
