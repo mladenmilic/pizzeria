@@ -3,6 +3,7 @@ import { User } from 'app/model/user';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { UserService } from 'app/services/user..service';
 import { Router } from '@angular/router';
+import { AuthService } from 'app/services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -14,7 +15,11 @@ export class LoginComponent implements OnInit {
   public user: User = new User();
   public loginForm: FormGroup;
 
-  constructor( protected userService: UserService, protected route: Router) {
+  constructor(
+    protected userService: UserService,
+    protected route: Router,
+    protected authService: AuthService
+    ) {
     this.loginForm = new FormGroup({
       username: new FormControl('', [Validators.required]),
       password: new FormControl('', [Validators.required])
@@ -22,6 +27,7 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.authService.logout();
   }
   public onSubmit() {
     this.user.username = this.loginForm.controls.username.value;
@@ -29,6 +35,9 @@ export class LoginComponent implements OnInit {
     const currentUser = this.userService.LogIn(this.user);
     if (currentUser) {
       // tslint:disable-next-line: no-unused-expression
+      localStorage.setItem('isLoggedIn', 'true');
+      localStorage.setItem('token', currentUser.fullName);
+      console.log(localStorage.getItem('token'));
       this.route.navigate(['/home']);
     }
   }

@@ -28,6 +28,7 @@ import { CreatePizzaComponent } from './components/create-pizza/create-pizza.com
 import { OverviewOrderComponent } from './components/overview-order/overview-order.component';
 import { DatePipe } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
+import { AuthGuard } from './guards/AuthGuard';
 @NgModule({
   declarations: [
     AppComponent,
@@ -60,7 +61,8 @@ import { HttpClientModule } from '@angular/common/http';
     HttpClientModule
   ],
   providers: [
-    DatePipe
+    DatePipe,
+    AuthGuard
   ],
   bootstrap: [AppComponent]
 })
