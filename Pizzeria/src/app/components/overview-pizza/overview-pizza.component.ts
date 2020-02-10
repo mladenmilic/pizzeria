@@ -26,7 +26,9 @@ export class OverviewPizzaComponent implements OnInit {
 
   private populateForm() {
     const id = +this.route.snapshot.paramMap.get('id');
-    this.pizza = this.pizzaService.getPizza(id);
+    this.pizzaService.getPizza(id).subscribe((res) => {
+      this.pizza = res;
+    });
   }
 
 }

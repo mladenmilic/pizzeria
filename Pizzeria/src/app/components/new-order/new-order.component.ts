@@ -26,8 +26,8 @@ export class NewOrderComponent implements OnInit {
   public listPizza: Pizza [];
   public listOrderItems: OrderItems [] = new Array();
   public totalAmout = 0;
-  public itemId = 1;
-  public orderId: number;
+  public itemId = 0;
+  public orderId = 0;
   public quantity = 1;
   public title = 'Kreiranje porudžbine';
   public id: number;
@@ -49,10 +49,9 @@ export class NewOrderComponent implements OnInit {
     this.user = this.userService.currentUser;
     this.dataSource =  new MatTableDataSource<any>(this.listOrderItems);
     this.dataSource.paginator = this.paginator;
-    this.listPlace = this.placeService.getListPlace();
-    this.listPizza = this.pizzaService.getListPizza();
+    this.fillSelectField();
     // tslint:disable-next-line: no-bitwise
-    this.orderId = Math.random() * 1000000000 | 0;
+    //this.orderId = Math.random() * 1000000000 | 0;
     this.newOrderFormGroup = new FormGroup({
       street: new FormControl('', [Validators.required]),
       place: new FormControl('', [Validators.required]),
@@ -69,18 +68,23 @@ export class NewOrderComponent implements OnInit {
 
 
   public createOrder() {
-     const order: Order = {
+     const order = {
        orderId: this.orderId,
        date: new Date(),
        orderItems: this.listOrderItems,
        phoneNumber: this.newOrderFormGroup.controls.mobileNumber.value,
-       place: this.newOrderFormGroup.controls.place.value,
+       //place: this.newOrderFormGroup.controls.place.value,
        street: this.newOrderFormGroup.controls.street.value,
-       user: this.user,
-       totalAmount: this.totalAmout
+       //user: this.user,
+       totalAmount: this.totalAmout,
+       userId: this.user.userId,
+       placezipCode: (this.newOrderFormGroup.controls.place.value).zipCode
      }
-     this.oredrService.addOrder(order);
-     this.route.navigate(['/list-orders']);
+     console.log(order);
+     this.oredrService.addOrder(order).subscribe((res) => {
+       console.log(res);
+       this.route.navigate(['/list-orders']);
+     });
   }
   public addPizza() {
     const quantity = this.quantity;
@@ -88,20 +92,21 @@ export class NewOrderComponent implements OnInit {
     const pizza: Pizza = this.newOrderFormGroup.controls.pizza.value;
     const orderId = this.orderId;
     const orderItem: OrderItems = {
-      itemId: this.itemId,
+      itemId: 0,
       orderId,
       quantity,
       price: pizza.price,
       amount: quantity * pizza.price,
-      pizza
+      pizzaName: pizza.pizzaName,
+      pizzaId:pizza.pizzaId
     };
     if (this.listOrderItems.length > 0) {
       const a = this.listOrderItems.find((element) => {
-        return element.pizza.pizzaId === pizza.pizzaId;
+        return element.pizzaId === pizza.pizzaId;
       });
       if (a) {
         this.listOrderItems.forEach((item) => {
-          if (item.pizza.pizzaId === a.pizza.pizzaId) {
+          if (item.pizzaId === a.pizzaId) {
             item.quantity += 1;
             item.amount += pizza.price;
             this.totalAmout += pizza.price;
@@ -109,13 +114,13 @@ export class NewOrderComponent implements OnInit {
           }
         });
       } else {
-         ++this.itemId;
-         orderItem.itemId = this.itemId;
+         //++this.itemId;
+         orderItem.itemId = 0;
          this.listOrderItems.push(orderItem);
          this.totalAmout += pizza.price;
       }
     } else {
-       this.itemId = 1;
+       this.itemId = 0;
        orderItem.itemId  = this.itemId;
        this.listOrderItems.push(orderItem);
        this.totalAmout += orderItem.amount;
@@ -123,7 +128,7 @@ export class NewOrderComponent implements OnInit {
     this.dataSource._updateChangeSubscription();
   }
   public deleteRow(element: OrderItems) {
-    this.totalAmout -= element.pizza.price;
+    this.totalAmout -= element.amount;
     this.listOrderItems = this.listOrderItems.filter(i => i !== element);
     this.listOrderItems = this.fixListOrderItems(this.listOrderItems);
     this.dataSource =  new MatTableDataSource<any>(this.listOrderItems);
@@ -139,21 +144,28 @@ export class NewOrderComponent implements OnInit {
       place: this.newOrderFormGroup.controls.place.value,
       street: this.newOrderFormGroup.controls.street.value,
       user: this.user,
-      totalAmount: this.totalAmout
+      totalAmount: this.totalAmout,
+      userId: this.user.userId,
+      placezipCode:(this.newOrderFormGroup.controls.place.value).zipCode
     }
-    this.oredrService.updateOrder(order);
-    this.route.navigate(['/list-orders']);
+    console.log(order);
+    this.oredrService.updateOrder(order).subscribe((res) => {
+      console.log(res);
+      this.route.navigate(['/list-orders']);
+    });
   }
   private changeAndPopulateForm() {
     this.title = 'Izmena porudžbine';
-    const order: Order = this.oredrService.getOrder(this.id);
-    this.totalAmout = order.totalAmount;
-    this.listOrderItems = order.orderItems;
-    this.dataSource = new MatTableDataSource<any>(this.listOrderItems);
-    this.dataSource.paginator = this.paginator;
-    this.newOrderFormGroup.controls.place.setValue(this.listPlace.find(i => i.zipCode === order.place.zipCode));
-    this.newOrderFormGroup.controls.street.setValue(order.street);
-    this.newOrderFormGroup.controls.mobileNumber.setValue(order.phoneNumber);
+    this.oredrService.getOrder(this.id).subscribe((res) => {
+      const order: Order = res;
+      this.totalAmout = order.totalAmount;
+      this.listOrderItems = order.orderItems;
+      this.dataSource = new MatTableDataSource<any>(this.listOrderItems);
+      this.dataSource.paginator = this.paginator;
+      this.newOrderFormGroup.controls.place.setValue(this.listPlace.find(i => i.zipCode === order.place.zipCode));
+      this.newOrderFormGroup.controls.street.setValue(order.street);
+      this.newOrderFormGroup.controls.mobileNumber.setValue(order.phoneNumber);
+    });
   }
   private fixListOrderItems(listOrderItems: OrderItems []) {
    if(listOrderItems.length === 1) {
@@ -180,6 +192,14 @@ export class NewOrderComponent implements OnInit {
     }
    }
    return listOrderItems;
+  }
+  private fillSelectField() {
+    this.placeService.getListPlace().subscribe((res) => {
+      this.listPlace = res;
+    });
+    this.pizzaService.getListPizza().subscribe((res) => {
+      this.listPizza = res;
+    });
   }
 }
 

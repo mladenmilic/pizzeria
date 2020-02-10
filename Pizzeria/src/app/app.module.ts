@@ -27,6 +27,7 @@ import { OverviewPizzaComponent } from './components/overview-pizza/overview-piz
 import { CreatePizzaComponent } from './components/create-pizza/create-pizza.component';
 import { OverviewOrderComponent } from './components/overview-order/overview-order.component';
 import { DatePipe } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
 @NgModule({
   declarations: [
     AppComponent,
@@ -55,7 +56,8 @@ import { DatePipe } from '@angular/common';
     MatSelectModule,
     CdkTableModule,
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    HttpClientModule
   ],
   providers: [
     DatePipe

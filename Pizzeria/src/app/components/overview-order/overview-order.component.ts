@@ -53,11 +53,13 @@ export class OverviewOrderComponent implements OnInit {
 
   private populateForm() {
     const id = +this.router.snapshot.paramMap.get('id');
-    const order: Order = this.oredrService.getOrder(id);
-    this.newOrderFormGroup.controls.street.setValue(order.street);
-    this.newOrderFormGroup.controls.place.setValue(order.place.township);
-    this.newOrderFormGroup.controls.mobileNumber.setValue(order.phoneNumber);
-    this.totalAmout = order.totalAmount;
-    this.dataSource.data = order.orderItems;
+    this.oredrService.getOrder(id).subscribe((res) => {
+      const order: Order = res;
+      this.newOrderFormGroup.controls.street.setValue(order.street);
+      this.newOrderFormGroup.controls.place.setValue(order.place.township);
+      this.newOrderFormGroup.controls.mobileNumber.setValue(order.phoneNumber);
+      this.totalAmout = order.totalAmount;
+      this.dataSource.data = order.orderItems;
+    });
   }
 }

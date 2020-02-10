@@ -30,10 +30,8 @@ export class ListOrdersComponent implements OnInit {
     ) { }
 
   ngOnInit() {
-    this.listOrders = this.orederService.getListOrder();
+    this.initTable();
     this.user =  this.userService.currentUser;
-    this.dataSource = new MatTableDataSource<any>(this.listOrders);
-    this.dataSource.paginator = this.paginator;
     this.newOrderFormGroup = new FormGroup({
       dateFrom: new FormControl(),
       dateTo: new FormControl(),
@@ -60,7 +58,20 @@ export class ListOrdersComponent implements OnInit {
     this.route.navigate(['/new-order/' + orderId]);
   }
   public deleteOrder(order: Order) {
-    this.orederService.deleteOrder(order);
-    this.dataSource.data = this.orederService.getListOrder();
+    this.orederService.deleteOrder(order).subscribe((res) => {
+      console.log(res);
+      this.initTable();
+    }
+    ,(error) => {
+      console.log(error);
+    }
+    );
+  }
+  private initTable() {
+    this.orederService.getListOrder().subscribe((res) => {
+      this.listOrders = res;
+      this.dataSource = new MatTableDataSource<any>(this.listOrders);
+      this.dataSource.paginator = this.paginator;
+    });
   }
 }

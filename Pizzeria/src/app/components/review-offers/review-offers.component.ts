@@ -1,5 +1,5 @@
 import { FormGroup, FormControl } from '@angular/forms';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { User } from 'app/model/user';
 import { Pizza } from 'app/model/Pizza';
 import { MatPaginator, MatTableDataSource, MatTable } from '@angular/material';
@@ -28,9 +28,7 @@ export class ReviewOffersComponent implements OnInit {
 
   ngOnInit() {
     this.user = this.userService.currentUser;
-    this.listPizza = this.pizzaService.getListPizza();
-    this.dataSource = new MatTableDataSource(this.listPizza);
-    this.dataSource.paginator = this.paginator;
+    this.initTable();
     this.pizzaFormGroup = new FormGroup({
       priceFrom: new FormControl(),
       priceTo: new FormControl()
@@ -43,10 +41,22 @@ export class ReviewOffersComponent implements OnInit {
     this.dataSource.data = this.pizzaService.filterByPrice(priceFrom, priceTo);
   }
   public deletOffer(element: Pizza) {
-    this.pizzaService.deletePizza(element);
-    this.dataSource.data = this.pizzaService.getListPizza();
+    this.pizzaService.deletePizza(element).subscribe((res) => {
+      console.log(res);
+      this.pizzaService.getListPizza().subscribe((res) => {
+        this.dataSource.data = res;
+      });
+    });
   }
   public back() {
     this.route.navigate(['/home']);
+  }
+
+  private initTable() {
+    this.pizzaService.getListPizza().subscribe((res) => {
+      this.listPizza = res;
+      this.dataSource = new MatTableDataSource(this.listPizza);
+      this.dataSource.paginator = this.paginator;
+    });
   }
 }

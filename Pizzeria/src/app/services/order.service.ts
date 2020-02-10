@@ -1,125 +1,34 @@
 import { Injectable } from '@angular/core';
 import { Order } from 'app/model/Order';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class OrderService {
 
-  public listOrder: Order[] = [
-    {
-      orderId: 1,
-      date: new Date('01-11-2020'),
-      phoneNumber:'066419525',
-      place:{
-        zipCode: 11000,
-        township: 'Stari grad'
-      },
-      street: 'Nemanjina 123',
-      totalAmount: 640,
-      orderItems:[
-        {
-          orderId: 1,
-          itemId: 1,
-          pizza:{
-            pizzaId: 1,
-            pizzaName: 'Sicilijana',
-            description: 'sunka kackavalj masline pecurke',
-            price: 300
-          },
-          amount: 300,
-          price: 300,
-          quantity: 1
-        },
-        {
-          orderId: 1,
-          itemId: 2,
-          pizza:{
-            pizzaId: 2,
-            pizzaName: 'Srbijana',
-            description: 'sunka kackavalj masline pecurke',
-            price: 340
-          },
-          amount: 340,
-          price: 340,
-          quantity: 1
-        }
-      ],
-      user: {
-        userId: 1,
-        fullName: 'Mladen Milic',
-        password: 'mladja',
-        username: 'mladja',
-        role: 'manager'
-      }
-    },
-    {
-      orderId: 2,
-      date: new Date('01-01-2020'),
-      phoneNumber: '066449565',
-      place:{
-        zipCode: 11070,
-        township: 'Novi Beograd'
-      },
-      street: 'Studenska 10',
-      totalAmount: 1280,
-      orderItems:[
-        {
-          orderId: 2,
-          itemId: 1,
-          pizza:{
-            pizzaId: 1,
-            pizzaName: 'Sicilijana',
-            description: 'sunka kackavalj masline pecurke',
-            price: 300
-          },
-          amount: 600,
-          price: 300,
-          quantity: 2
-        },
-        {
-          orderId: 1,
-          itemId: 2,
-          pizza:{
-            pizzaId: 2,
-            pizzaName: 'Srbijana',
-            description: 'sunka kackavalj masline pecurke',
-            price: 340
-          },
-          amount: 680,
-          price: 340,
-          quantity: 2
-        }
-      ],
-      user: {
-        userId: 1,
-        fullName: 'Mladen Milic',
-        password: 'mladja',
-        username: 'mladja',
-        role: 'manager'
-      }
-    }
-  ];
+  constructor(
+    protected http: HttpClient
+  ) { }
 
-  constructor() { }
-
-  public getListOrder() {
-    return this.listOrder;
+  public getListOrder() : Observable<any> {
+    return this.http.get('https://localhost:44329/order/list-order');
   }
-  public getOrder(orderId): Order {
-    return this.listOrder.find( i => i.orderId === orderId);
+  public getOrder(orderId): Observable<any> {
+    return this.http.get('https://localhost:44329/order/list-order/' + orderId);
   }
-  public addOrder(order: Order) {
-    this.listOrder.push(order);
+  public addOrder(order: any): Observable<any> {
+    return this.http.post('https://localhost:44329/order/add-order', order);
   }
-  public filterByOrderId(orderId?: number): Order [] {
+  public filterByOrderId(orderId?: number){
     if(orderId) {
-      return this.listOrder.filter(i => i.orderId === orderId);
+      //return this.listOrder.filter(i => i.orderId === orderId);
     }
-    return this.getListOrder();
+    //return this.getListOrder();
   }
-  public filterByDate(dateFrom?: Date, dateTo?: Date): Order [] {
-      if (!dateFrom && !dateTo){
+  public filterByDate(dateFrom?: Date, dateTo?: Date){
+     /* if (!dateFrom && !dateTo){
         return this.listOrder;
       }
       if (!dateFrom && dateTo) {
@@ -128,24 +37,14 @@ export class OrderService {
       if(!dateTo && dateFrom) {
         this.listOrder.filter(i => i.date >= dateFrom);
       }
-      return this.listOrder.filter(i => i.date >= dateFrom && i.date <= dateTo);
+      return this.listOrder.filter(i => i.date >= dateFrom && i.date <= dateTo); */
   }
-  public deleteOrder(order: Order) {
-    this.listOrder = this.listOrder.filter(i => i.orderId !== order.orderId);
+  public deleteOrder(order: Order): Observable<any> {
+   // this.listOrder = this.listOrder.filter(i => i.orderId !== order.orderId);
+   return this.http.delete('https://localhost:44329/order/delete/' + order.orderId);
+
   }
-  public updateOrder(order: Order) {
-    console.log(order);
-    this.listOrder.forEach((element) => {
-      if (element.orderId === order.orderId) {
-        element.place = order.place;
-        element.street = order.street;
-        element.totalAmount = order.totalAmount;
-        element.user = order.user;
-        element.date = order.date;
-        element.orderItems = order.orderItems;
-        element.phoneNumber = order.phoneNumber;
-        return;
-      }
-    });
+  public updateOrder(order: Order): Observable<any> {
+    return this.http.put('https://localhost:44329/order/update', order);
   }
 }

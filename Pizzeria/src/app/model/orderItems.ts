@@ -7,5 +7,6 @@ export class OrderItems {
   public quantity: number;
   public price: number;
   public amount: number;
-  public pizza: Pizza;
+  public pizzaName: string;
+  public pizzaId: number;
 }

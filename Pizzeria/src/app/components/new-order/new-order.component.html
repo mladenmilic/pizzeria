@@ -45,12 +45,12 @@
                   <ng-container  matColumnDef="redniBroj">
                     <th  mat-header-cell *matHeaderCellDef>Redni broj stavke</th>
                     <td mat-cell *matCellDef="let element; let i = index;">
-                       {{element.itemId}}
+                       {{i+1}}
                      </td>
                   </ng-container>
                   <ng-container matColumnDef="nazivPice">
                     <th mat-header-cell *matHeaderCellDef> Naziv pice </th>
-                    <td mat-cell *matCellDef="let element"> {{element.pizza.pizzaName}} </td>
+                    <td mat-cell *matCellDef="let element"> {{element.pizzaName}} </td>
                   </ng-container>
                   <ng-container matColumnDef="kolicina">
                     <th mat-header-cell *matHeaderCellDef> Količina </th>

@@ -14,7 +14,7 @@ import { User } from 'app/model/user';
 export class CreatePizzaComponent implements OnInit {
   public user: User;
   public createPizzaFormGroup: FormGroup;
-  public pizzaId: number;
+  public pizzaId = 0;
   public id = 0;
   public title = 'Kreiranje ponude';
   public pizza: Pizza;
@@ -32,7 +32,6 @@ export class CreatePizzaComponent implements OnInit {
       description: new FormControl('',[Validators.required]),
       price: new FormControl('',[Validators.required])
     });
-    this.pizzaId = Math.random() * 1000000000 | 0;
     this.id = +this.route.snapshot.paramMap.get('id');
     if(this.id > 0) {
       this.populateAndChangeForm();
@@ -46,15 +45,19 @@ export class CreatePizzaComponent implements OnInit {
       description: this.createPizzaFormGroup.controls.description.value,
       price: this.createPizzaFormGroup.controls.price.value
     }
-    this.pizzaService.createPizza(pizza);
-    this.router.navigate(['/review-offers']);
+    this.pizzaService.createPizza(pizza).subscribe((res) => {
+      console.log(res);
+      this.router.navigate(['/review-offers']);
+    });
   }
   public populateAndChangeForm() {
     this.title = 'Promena ponude';
-    this.pizza = this.pizzaService.getPizza(this.id);
-    this.createPizzaFormGroup.controls.pizzaName.setValue(this.pizza.pizzaName);
-    this.createPizzaFormGroup.controls.description.setValue(this.pizza.description);
-    this.createPizzaFormGroup.controls.price.setValue(this.pizza.price);
+    this.pizzaService.getPizza(this.id).subscribe((res) => {
+      this.pizza =  res;
+      this.createPizzaFormGroup.controls.pizzaName.setValue(this.pizza.pizzaName);
+      this.createPizzaFormGroup.controls.description.setValue(this.pizza.description);
+      this.createPizzaFormGroup.controls.price.setValue(this.pizza.price);
+    });
   }
   public updatePizza() {
     const pizza: Pizza = {
@@ -63,7 +66,9 @@ export class CreatePizzaComponent implements OnInit {
       description: this.createPizzaFormGroup.controls.description.value,
       price: this.createPizzaFormGroup.controls.price.value
     }
-    this.pizzaService.updatePizza(pizza);
-    this.router.navigate(['/review-offers']);
+    this.pizzaService.updatePizza(pizza).subscribe((res) => {
+      console.log(res);
+      this.router.navigate(['/review-offers']);
+    });
   }
 }

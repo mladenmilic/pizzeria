@@ -2,6 +2,7 @@ import { Pizza } from './../model/Pizza';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { filter } from 'minimatch';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -34,29 +35,24 @@ export class PizzaService {
       price: 390,
     }
   ]
-  constructor(){ }
+  public constructor(
+    protected http: HttpClient
+  ){ }
 
-  public getListPizza(): Pizza [] {
-    return this.listPizza;
+  public getListPizza(): Observable <any> {
+    return this.http.get('https://localhost:44329/pizza/list-pizza');
   }
-  public deletePizza(pizza: Pizza) {
-    this.listPizza = this.listPizza.filter(i => i !== pizza);
+  public deletePizza(pizza: Pizza): Observable<any> {
+    return this.http.delete('https://localhost:44329/pizza/delete/' + pizza.pizzaId);
   }
-  public createPizza(pizza: Pizza) {
-    this.listPizza.push(pizza);
+  public createPizza(pizza: Pizza): Observable <any> {
+    return this.http.post('https://localhost:44329/pizza/add-pizza', pizza);
   }
-  public getPizza(piazzaId: number): Pizza {
-    return this.listPizza.filter(i => i.pizzaId === piazzaId)[0];
+  public getPizza(piazzaId: number): Observable<any> {
+    return this.http.get('https://localhost:44329/pizza/list-pizza/' + piazzaId);
   }
-  public updatePizza(pizza: Pizza) {
-    this.listPizza.forEach((element) =>{
-      if(element.pizzaId === pizza.pizzaId) {
-        element.pizzaName = pizza.pizzaName;
-        element.description = pizza.description;
-        element.price = pizza.price;
-        return;
-      }
-    })
+  public updatePizza(pizza: Pizza): Observable<any> {
+    return this.http.put('https://localhost:44329/pizza/update', pizza);
   }
   public filterByPrice(priceFrom?: number, priceTo?: number): Pizza [] {
    const filterListPizza: Pizza [] = [];
@@ -74,7 +70,7 @@ export class PizzaService {
     return this.listPizza.filter(i => i.price >= priceFrom);
    }
    if(!priceFrom && !priceTo) {
-     return this.getListPizza();
+     //return this.getListPizza();
    }
    return filterListPizza;
   }

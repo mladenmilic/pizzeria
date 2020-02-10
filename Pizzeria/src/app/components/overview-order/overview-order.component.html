@@ -15,10 +15,10 @@
         </div>
         <div class="row">
             <mat-form-field class="col-md-4">
-              <input matInput [formControl]="newOrderFormGroup.controls['mobileNumber']"  placeholder="Broj telefona">
+              <input readonly matInput [formControl]="newOrderFormGroup.controls['mobileNumber']"  placeholder="Broj telefona">
             </mat-form-field>
             <mat-form-field  class="col-md-2">
-                <input matInput [value]="totalAmout" placeholder="Ukupan iznos">
+                <input readonly matInput [value]="totalAmout" placeholder="Ukupan iznos">
               </mat-form-field>
           </div>
           <mat-card-header style="margin-top: 3%" class="row">

@@ -1,5 +1,7 @@
+import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { Place } from 'app/model/Place';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -28,8 +30,10 @@ export class PlaceService {
     }
   ];
 
-  constructor() { }
-  public getListPlace(): Place [] {
-    return this.listPlaces;
+  constructor(
+    protected http: HttpClient
+  ) { }
+  public getListPlace(): Observable<any> {
+    return this.http.get('https://localhost:44329/place/list-places');
   }
 }

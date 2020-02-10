@@ -1,6 +1,6 @@
 <mat-toolbar><button (click)="back()" mat-button><img src="../../../assets/icons8-go-back-64.png"/></button><span class="title-center">Zaposleni: {{user.fullName}}</span></mat-toolbar>
 <form [formGroup] = "pizzaFormGroup">
-  <div class="container row">
+  <div *ngIf="listPizza.length > 0" class="container row">
       <mat-card class="col-md-12">
           <mat-card-header class="row">
               <h4 class=" text-center">Pregled ponuda</h4>
@@ -26,7 +26,7 @@
             </div>
           </div>
           <div style="margin-top: 5%" class="row">
-            <table  mat-table [dataSource]="dataSource">
+            <table mat-table [dataSource]="dataSource">
 
               <!-- Position Column -->
               <ng-container matColumnDef="pizzaId">

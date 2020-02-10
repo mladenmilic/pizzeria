@@ -6,6 +6,8 @@ export class Order {
   public orderId: number;
   public date: Date;
   public totalAmount: number;
+  public placezipCode: number;
+  public userId: number;
   public street: string;
   public place: Place;
   public phoneNumber: string;
