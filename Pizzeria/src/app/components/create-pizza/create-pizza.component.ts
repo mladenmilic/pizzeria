@@ -5,7 +5,7 @@ import { Component, OnInit } from '@angular/core';
 import { UserService } from 'app/services/user..service';
 import { PizzaService } from 'app/services/pizza.service';
 import { User } from 'app/model/user';
-
+import * as jwt_decode from 'jwt-decode';
 @Component({
   selector: 'app-create-pizza',
   templateUrl: './create-pizza.component.html',
@@ -26,7 +26,7 @@ export class CreatePizzaComponent implements OnInit {
       ) { }
 
   ngOnInit() {
-    this.user = this.userService.currentUser;
+    this.findUser();
     this.createPizzaFormGroup = new FormGroup({
       pizzaName: new FormControl('',[Validators.required]),
       description: new FormControl('',[Validators.required]),
@@ -70,5 +70,8 @@ export class CreatePizzaComponent implements OnInit {
       console.log(res);
       this.router.navigate(['/review-offers']);
     });
+  }
+  private findUser() {
+    this.user = jwt_decode(localStorage.getItem('token'));
   }
 }

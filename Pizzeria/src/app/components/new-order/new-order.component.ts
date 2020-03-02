@@ -12,6 +12,8 @@ import { Order } from 'app/model/Order';
 import { OrderService } from 'app/services/order.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { DatePipe } from '@angular/common';
+import * as jwt_decode from 'jwt-decode';
+
 @Component({
   selector: 'app-new-order',
   templateUrl: './new-order.component.html',
@@ -46,7 +48,7 @@ export class NewOrderComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.user = this.userService.currentUser;
+    this.findUser();
     this.dataSource =  new MatTableDataSource<any>(this.listOrderItems);
     this.dataSource.paginator = this.paginator;
     this.fillSelectField();
@@ -60,7 +62,7 @@ export class NewOrderComponent implements OnInit {
       itemId: new FormControl('', [])
     });
     this.id = +this.router.snapshot.paramMap.get('id');
-    if(this.id > 0) {
+    if (this.id > 0) {
       this.changeAndPopulateForm();
     }
   }
@@ -200,6 +202,10 @@ export class NewOrderComponent implements OnInit {
     this.pizzaService.getListPizza().subscribe((res) => {
       this.listPizza = res;
     });
+  }
+
+  private findUser() {
+    this.user = jwt_decode(localStorage.getItem('token'));
   }
 }
 

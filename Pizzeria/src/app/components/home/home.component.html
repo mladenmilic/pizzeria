@@ -1,5 +1,5 @@
-<mat-toolbar><button (click)="logout()" mat-button><img src="../../../assets/icons8-logout-rounded-left-50.png"/></button><span class="title-center">Zaposleni: {{fullName}}</span></mat-toolbar>
-<div  *ngIf = "user" class="container row">
+<mat-toolbar *ngIf = "user" ><button (click)="logout()" mat-button><img src="../../../assets/icons8-logout-rounded-left-50.png"/></button><span class="title-center">Zaposleni: {{user.fullName}}</span></mat-toolbar>
+<div  *ngIf="user" class="container row">
   <div class="col-md-4">
     <mat-card routerLink="/new-order" >
       <img mat-card-image src="../../../assets/order.jpg" alt="Photo of a Shiba Inu">
@@ -25,4 +25,3 @@
   </mat-card>
 </div>
 </div>
-

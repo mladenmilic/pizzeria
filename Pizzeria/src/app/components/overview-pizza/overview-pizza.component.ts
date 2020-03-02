@@ -4,7 +4,7 @@ import { UserService } from 'app/services/user..service';
 import { ActivatedRoute } from '@angular/router';
 import { Pizza } from 'app/model/Pizza';
 import { PizzaService } from 'app/services/pizza.service';
-
+import * as jwt_decode from 'jwt-decode';
 @Component({
   selector: 'app-overview-pizza',
   templateUrl: './overview-pizza.component.html',
@@ -20,7 +20,7 @@ export class OverviewPizzaComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.user = this.userService.currentUser;
+    this.findUser();
     this.populateForm();
   }
 
@@ -30,5 +30,7 @@ export class OverviewPizzaComponent implements OnInit {
       this.pizza = res;
     });
   }
-
+  private findUser() {
+    this.user = jwt_decode(localStorage.getItem('token'));
+  }
 }

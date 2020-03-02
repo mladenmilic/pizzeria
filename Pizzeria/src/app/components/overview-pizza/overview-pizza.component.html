@@ -1,5 +1,5 @@
-<mat-toolbar><span class="title-center">Zaposleni: {{user.fullName}}</span></mat-toolbar>
-  <mat-card  class="container">
+<mat-toolbar *ngIf="user"><span class="title-center">Zaposleni: {{user.fullName}}</span></mat-toolbar>
+  <mat-card  *ngIf="pizza" class="container">
     <div style="margin-top: 1.5%" class="row">
       <div class="col-md-2"></div>
       <div class="col-md-10">

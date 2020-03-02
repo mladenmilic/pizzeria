@@ -1,6 +1,6 @@
-<mat-toolbar><span class="title-center">Zaposleni: {{user.fullName}}</span></mat-toolbar>
+<mat-toolbar *ngIf="user"><span class="title-center">Zaposleni: {{user.fullName}}</span></mat-toolbar>
 <form [formGroup]="createPizzaFormGroup">
-  <mat-card  class="container">
+  <mat-card *ngIf="user" class="container">
     <div style="margin-top: 1.5%" class="row">
       <div class="col-md-2"></div>
       <div class="col-md-10">

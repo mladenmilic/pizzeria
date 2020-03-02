@@ -1,5 +1,7 @@
+import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { User } from 'app/model/user';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -22,14 +24,11 @@ public listUsers: User [] = [
     role: 'worker'
   }
 ];
-  constructor() { }
+  constructor(
+    protected http: HttpClient
+  ) { }
 
-  public LogIn(user: User): User {
-     // tslint:disable-next-line: variable-name
-     const _user = this.listUsers.find(
-        u => u.username === user.username && u.password === user.password
-     );
-     this.currentUser = _user;
-     return _user;
+  public LogIn(user: User): Observable <any> {
+    return this.http.post('https://localhost:44329/user/list-user/user', user);
   }
 }

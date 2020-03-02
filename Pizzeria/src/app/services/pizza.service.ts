@@ -54,24 +54,7 @@ export class PizzaService {
   public updatePizza(pizza: Pizza): Observable<any> {
     return this.http.put('https://localhost:44329/pizza/update', pizza);
   }
-  public filterByPrice(priceFrom?: number, priceTo?: number): Pizza [] {
-   const filterListPizza: Pizza [] = [];
-   if (priceFrom && priceTo) {
-     this.listPizza.forEach((el) => {
-       if( el.price >= priceFrom || el.price <= priceTo) {
-         filterListPizza.push(el);
-       }
-     });
-   }
-   if(!priceFrom && priceTo) {
-    return this.listPizza.filter(i => i.price <= priceTo);
-   }
-   if(!priceTo && priceFrom) {
-    return this.listPizza.filter(i => i.price >= priceFrom);
-   }
-   if(!priceFrom && !priceTo) {
-     //return this.getListPizza();
-   }
-   return filterListPizza;
+  public filterByPrice(priceFrom?: string, priceTo?: string): Observable <any> {
+   return this.http.get('https://localhost:44329/pizza/filter/?priceFrom=' + priceFrom + '&priceTo=' + priceTo);
   }
 }

@@ -1,7 +1,8 @@
-<mat-toolbar><button routerLink="/home" mat-button><img src="../../../assets/icons8-go-back-64.png"/></button><span class="title-center">Zaposleni: {{user.fullName}}</span></mat-toolbar>
+<div *ngIf="user">
+<mat-toolbar *ngIf="user"><button routerLink="/home" mat-button><img src="../../../assets/icons8-go-back-64.png"/></button><span class="title-center">Zaposleni: {{user.fullName}}</span></mat-toolbar>
   <form [formGroup] = "newOrderFormGroup">
     <div [ngStyle]="{top: dataSource.data.length == 0 ? '40%' : '55%'}" class=" container row">
-      <mat-card class="col-md-12">
+      <mat-card *ngIf="user" class="col-md-12">
         <mat-card-header class="row">
             <h4 class=" text-center">{{title}}</h4>
         </mat-card-header>
@@ -34,7 +35,7 @@
                     <mat-error>Polje je obavezno</mat-error>
               </mat-form-field>
               <div style="margin-top: 1.5%" class="col-md-5">
-                  <button [disabled]="!newOrderFormGroup.valid" style="width: 20%;" class="btn btn-primary btn-sm" (click)="addPizza()" >Dodaj picu</button>
+                  <button [disabled]="!newOrderFormGroup.valid" style="width: 20vh;" class="btn btn-primary btn-sm" (click)="addPizza()" >Dodaj picu</button>
               </div>
           </div>
           <div  [hidden]="dataSource.data.length == 0" class="row">
@@ -89,3 +90,4 @@
       </mat-card>
     </div>
   </form>
+</div>

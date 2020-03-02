@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { User } from 'app/model/user';
 import { UserService } from 'app/services/user..service';
 import { AuthService } from 'app/services/auth.service';
+import * as jwt_decode from 'jwt-decode';
 
 @Component({
   selector: 'app-home',
@@ -20,12 +21,15 @@ export class HomeComponent implements OnInit {
     ) { }
 
   ngOnInit() {
-    this.user = this.userService.currentUser;
-    this.fullName = localStorage.getItem('token');
+    this.findUser();
   }
 
   public logout() {
     this.authService.logout();
     this.router.navigate(['/login']);
+  }
+
+  private findUser() {
+    this.user = jwt_decode(localStorage.getItem('token'));
   }
 }

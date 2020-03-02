@@ -12,7 +12,7 @@ export class OrderService {
     protected http: HttpClient
   ) { }
 
-  public getListOrder() : Observable<any> {
+  public getListOrder(): Observable<any> {
     return this.http.get('https://localhost:44329/order/list-order');
   }
   public getOrder(orderId): Observable<any> {
@@ -21,23 +21,14 @@ export class OrderService {
   public addOrder(order: any): Observable<any> {
     return this.http.post('https://localhost:44329/order/add-order', order);
   }
-  public filterByOrderId(orderId?: number){
+  public filterByOrderId(orderId?: number): Observable<any>{
     if(orderId) {
-      //return this.listOrder.filter(i => i.orderId === orderId);
+      return this.http.get('https://localhost:44329/order/list-order/' + orderId);
     }
-    //return this.getListOrder();
+    return this.getListOrder();
   }
-  public filterByDate(dateFrom?: Date, dateTo?: Date){
-     /* if (!dateFrom && !dateTo){
-        return this.listOrder;
-      }
-      if (!dateFrom && dateTo) {
-        return this.listOrder.filter(i => i.date <= dateTo);
-      }
-      if(!dateTo && dateFrom) {
-        this.listOrder.filter(i => i.date >= dateFrom);
-      }
-      return this.listOrder.filter(i => i.date >= dateFrom && i.date <= dateTo); */
+  public filterByDate(dateFrom?: string, dateTo?: string): Observable<any>{
+     return this.http.get('https://localhost:44329/order/filter/?dateFrom=' + dateFrom + '&dateTo=' + dateTo);
   }
   public deleteOrder(order: Order): Observable<any> {
    // this.listOrder = this.listOrder.filter(i => i.orderId !== order.orderId);

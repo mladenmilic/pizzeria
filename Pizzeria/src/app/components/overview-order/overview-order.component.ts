@@ -12,7 +12,7 @@ import { OrderService } from 'app/services/order.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { Order } from 'app/model/Order';
-
+import * as jwt_decode from 'jwt-decode';
 @Component({
   selector: 'app-overview-order',
   templateUrl: './overview-order.component.html',
@@ -40,7 +40,7 @@ export class OverviewOrderComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.user = this.userService.currentUser;
+    this.findUser();
     this.dataSource =  new MatTableDataSource<any>(this.listOrderItems);
     this.dataSource.paginator = this.paginator;
     this.newOrderFormGroup = new FormGroup({
@@ -61,5 +61,8 @@ export class OverviewOrderComponent implements OnInit {
       this.totalAmout = order.totalAmount;
       this.dataSource.data = order.orderItems;
     });
+  }
+  private findUser() {
+    this.user = jwt_decode(localStorage.getItem('token'));
   }
 }

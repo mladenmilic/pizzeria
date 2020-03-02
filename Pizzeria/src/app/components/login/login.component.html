@@ -1,5 +1,7 @@
-<h4 class=" title text-center">Prijavite se</h4>
 <mat-card class="container">
+  <div class="text-center">
+    <h4>Prijavite se</h4>
+  </div>
 	<form [formGroup]="loginForm" (ngSubmit)="onSubmit()" novalidate>
 		<div class="form-group">
 			<label for="exampleInputEmail1">Username</label>
@@ -13,6 +15,6 @@
       <label for="exampleInputPassword1">Password</label>
       <input type="password" class="form-control" formControlName="password" placeholder="Password">
     </div>
-    <button  type="submit" class="btn btn-primary" [disabled]="!loginForm.valid">Prijavi se</button>
+    <button style="width: 20vh;" type="submit" class="btn btn-primary" [disabled]="!loginForm.valid">Prijavi se</button>
   </form>
 </mat-card>

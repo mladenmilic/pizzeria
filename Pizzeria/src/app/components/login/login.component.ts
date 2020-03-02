@@ -32,13 +32,17 @@ export class LoginComponent implements OnInit {
   public onSubmit() {
     this.user.username = this.loginForm.controls.username.value;
     this.user.password = this.loginForm.controls.password.value;
-    const currentUser = this.userService.LogIn(this.user);
-    if (currentUser) {
-      // tslint:disable-next-line: no-unused-expression
-      localStorage.setItem('isLoggedIn', 'true');
-      localStorage.setItem('token', currentUser.fullName);
-      console.log(localStorage.getItem('token'));
-      this.route.navigate(['/home']);
-    }
+    this.userService.LogIn(this.user).subscribe((currentUser) => {
+      if (currentUser) {
+        // tslint:disable-next-line: no-unused-expression
+        localStorage.setItem('isLoggedIn', 'true');
+        localStorage.setItem('token', currentUser.token);
+        console.log(localStorage.getItem('token'));
+        this.route.navigate(['/home']);
+      }
+    },
+    (err) => {
+      console.log(err);
+    });
   }
 }

@@ -6,7 +6,8 @@ import { MatPaginator, MatTableDataSource, MatTable } from '@angular/material';
 import { UserService } from 'app/services/user..service';
 import { PizzaService } from 'app/services/pizza.service';
 import { Router } from '@angular/router';
-
+import * as jwt_decode from 'jwt-decode';
+import { isNumber } from 'util';
 @Component({
   selector: 'app-review-offers',
   templateUrl: './review-offers.component.html',
@@ -27,7 +28,7 @@ export class ReviewOffersComponent implements OnInit {
      ) { }
 
   ngOnInit() {
-    this.user = this.userService.currentUser;
+    this.findUser();
     this.initTable();
     this.pizzaFormGroup = new FormGroup({
       priceFrom: new FormControl(),
@@ -35,10 +36,27 @@ export class ReviewOffersComponent implements OnInit {
     });
   }
   public filterByPrice() {
-    const priceFrom = +this.pizzaFormGroup.controls.priceFrom.value;
-    const priceTo = +this.pizzaFormGroup.controls.priceTo.value;
+    const priceFrom = + (this.pizzaFormGroup.controls.priceFrom.value > 0) ?
+    this.pizzaFormGroup.controls.priceFrom.value : '';
+    const priceTo = + (this.pizzaFormGroup.controls.priceTo.value > 0) ?
+    this.pizzaFormGroup.controls.priceTo.value : '' ;
     console.log(priceFrom, priceTo);
-    this.dataSource.data = this.pizzaService.filterByPrice(priceFrom, priceTo);
+    this.pizzaService.filterByPrice(priceFrom, priceTo).subscribe((res) => {
+      console.log(res);
+      this.listPizza = new Array();
+      if(res.length > 0) {
+        this.listPizza = res;
+      } else {
+        this.listPizza.push(res);
+      }
+      this.dataSource = new MatTableDataSource<any>(this.listPizza);
+      this.dataSource.paginator = this.paginator;
+    },
+    (err) => {
+      console.log(err);
+    });
+    this.pizzaFormGroup.controls.priceTo.setValue(null);
+    this.pizzaFormGroup.controls.priceFrom.setValue(null);
   }
   public deletOffer(element: Pizza) {
     this.pizzaService.deletePizza(element).subscribe((res) => {
@@ -58,5 +76,8 @@ export class ReviewOffersComponent implements OnInit {
       this.dataSource = new MatTableDataSource(this.listPizza);
       this.dataSource.paginator = this.paginator;
     });
+  }
+  private findUser() {
+    this.user = jwt_decode(localStorage.getItem('token'));
   }
 }
