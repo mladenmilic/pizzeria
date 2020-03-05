@@ -29,6 +29,11 @@ import { OverviewOrderComponent } from './components/overview-order/overview-ord
 import { DatePipe } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { AuthGuard } from './guards/AuthGuard';
+import { InformationDialogComponent } from './components/dialog/information-dialog/information-dialog.component';
+import { ErrorDialogComponent } from './components/dialog/error-dialog/error-dialog.component';
+import { ConfirmationDialogComponent } from './components/dialog/confirmation-dialog/confirmation-dialog.component';
+import {MatDialogModule} from '@angular/material/dialog';
+import {NgxSpinnerModule} from 'ngx-spinner';
 @NgModule({
   declarations: [
     AppComponent,
@@ -39,7 +44,10 @@ import { AuthGuard } from './guards/AuthGuard';
     ReviewOffersComponent,
     OverviewPizzaComponent,
     CreatePizzaComponent,
-    OverviewOrderComponent
+    OverviewOrderComponent,
+    InformationDialogComponent,
+    ErrorDialogComponent,
+    ConfirmationDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -58,7 +66,14 @@ import { AuthGuard } from './guards/AuthGuard';
     CdkTableModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    HttpClientModule
+    HttpClientModule,
+    MatDialogModule,
+    NgxSpinnerModule
+  ],
+  entryComponents: [
+    InformationDialogComponent,
+    ErrorDialogComponent,
+    ConfirmationDialogComponent
   ],
   providers: [
     DatePipe,

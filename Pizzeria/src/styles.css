@@ -5,3 +5,19 @@ body {
    font-family: Roboto, "Helvetica Neue", sans-serif;
    background-image: url(../src/assets/pizza-background.jpg);
   }
+  .white {
+    background: white;
+  }
+  mat-dialog-container {
+    background-color: #f2edd0 !important;
+  }
+  .mat-dialog-content  {
+    max-height: 75vh !important;
+  }
+
+  .mat-raised-button {
+   color:#b09965 !important;
+   font-size: 24px !important;
+   height: 50px;
+   width: 200px;
+}

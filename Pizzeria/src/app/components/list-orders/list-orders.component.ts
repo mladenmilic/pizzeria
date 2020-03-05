@@ -14,7 +14,7 @@ import * as moment from 'moment';
   templateUrl: './list-orders.component.html',
   styleUrls: ['./list-orders.component.css']
 })
-export class ListOrdersComponent implements OnInit{
+export class ListOrdersComponent implements OnInit , AfterViewInit{
   public user: User;
   public displayedColumns: string[] = ['sifra', 'datum', 'iznos', 'akcija'];
   public dataSource: any;
@@ -30,13 +30,15 @@ export class ListOrdersComponent implements OnInit{
     ) { }
 
   ngOnInit() {
-    this.initTable();
     this.findUser();
     this.newOrderFormGroup = new FormGroup({
       dateFrom: new FormControl(),
       dateTo: new FormControl(),
       orderId: new FormControl()
     });
+  }
+  ngAfterViewInit(): void {
+    this.initTable();
   }
 
   public filterByDate() {

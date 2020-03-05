@@ -1,8 +1,8 @@
-<div *ngIf="user">
+<div [hidden]="!user">
 <mat-toolbar *ngIf="user"><button routerLink="/home" mat-button><img src="../../../assets/icons8-go-back-64.png"/></button><span class="title-center">Zaposleni: {{user.fullName}}</span></mat-toolbar>
   <form [formGroup] = "newOrderFormGroup">
     <div [ngStyle]="{top: dataSource.data.length == 0 ? '40%' : '55%'}" class=" container row">
-      <mat-card *ngIf="user" class="col-md-12">
+      <mat-card [hidden]="!user" class="col-md-12">
         <mat-card-header class="row">
             <h4 class=" text-center">{{title}}</h4>
         </mat-card-header>
@@ -42,7 +42,7 @@
               <mat-card-header style="margin-top: 3%" class="row">
                   <h4 class=" text-center">Stavke porudžbine</h4>
               </mat-card-header>
-              <table #table  class="col-md-12" mat-table [dataSource]="dataSource">
+              <table [hidden]="dataSource.data.length == 0"  class="col-md-12" mat-table [dataSource]="dataSource">
                   <ng-container  matColumnDef="redniBroj">
                     <th  mat-header-cell *matHeaderCellDef>Redni broj stavke</th>
                     <td mat-cell *matCellDef="let element; let i = index;">
@@ -80,7 +80,7 @@
                   <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
                 </table>
 
-                <mat-paginator  [pageSizeOptions]="[3,6,9]" showFirstLastButtons></mat-paginator>
+                <mat-paginator  [pageSizeOptions]="[2]" showFirstLastButtons></mat-paginator>
               </div>
           <mat-card-actions class="row">
             <button [hidden]="id !==0" [disabled]="!newOrderFormGroup.valid || dataSource.data.length == 0" class=" col-md-2 btn btn-primary btn-sm" (click)="createOrder()">Kreiraj porudžbinu</button>

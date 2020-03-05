@@ -1,7 +1,7 @@
 <mat-toolbar *ngIf = "user"><button routerLink="/home" mat-button><img src="../../../assets/icons8-go-back-64.png"/></button><span class="title-center">Zaposleni: {{user.fullName}}</span></mat-toolbar>
 <form [formGroup] = "newOrderFormGroup">
   <div class="container row">
-      <mat-card *ngIf ="listOrders.length > 0" class="col-md-12">
+      <mat-card [hidden] ="listOrders.length === 0" class="col-md-12">
           <mat-card-header class="row">
               <h4 class=" text-center">Pregled porudžbina</h4>
           </mat-card-header>

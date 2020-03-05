@@ -13,6 +13,7 @@ import { OrderService } from 'app/services/order.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import * as jwt_decode from 'jwt-decode';
+import { toUnicode } from 'punycode';
 
 @Component({
   selector: 'app-new-order',
@@ -126,6 +127,8 @@ export class NewOrderComponent implements OnInit {
        orderItem.itemId  = this.itemId;
        this.listOrderItems.push(orderItem);
        this.totalAmout += orderItem.amount;
+       this.dataSource = new MatTableDataSource<any>(this.listOrderItems);
+       this.dataSource.paginator = this.paginator;
     }
     this.dataSource._updateChangeSubscription();
   }
