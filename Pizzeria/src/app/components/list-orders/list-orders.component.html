@@ -68,6 +68,9 @@
 
           <mat-paginator [pageSizeOptions]="[3, 6, 9]" showFirstLastButtons></mat-paginator>
       </mat-card>
+      <div class = "center-img" [hidden]="listOrders.length != 0">
+        <img src="../../../assets/no-order.png">
+      </div>
     </div>
 </form>
 

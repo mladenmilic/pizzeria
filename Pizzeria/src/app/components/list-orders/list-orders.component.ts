@@ -1,8 +1,9 @@
+import { ConfirmationDialogComponent } from './../dialog/confirmation-dialog/confirmation-dialog.component';
 import { Component, OnInit, ViewChild, AfterViewInit, OnChanges } from '@angular/core';
 import { UserService } from 'app/services/user..service';
 import { User } from 'app/model/user';
 import { Order } from 'app/model/Order';
-import { MatTableDataSource, MatPaginator, MatTable } from '@angular/material';
+import { MatTableDataSource, MatPaginator, MatTable, MatDialog } from '@angular/material';
 import { OrderService } from 'app/services/order.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { DatePipe} from '@angular/common';
@@ -26,7 +27,8 @@ export class ListOrdersComponent implements OnInit , AfterViewInit{
     protected userService: UserService,
     protected orederService: OrderService,
     protected datePipe: DatePipe,
-    protected route: Router
+    protected route: Router,
+    protected dialog: MatDialog
     ) { }
 
   ngOnInit() {
@@ -91,12 +93,21 @@ export class ListOrdersComponent implements OnInit , AfterViewInit{
     this.route.navigate(['/new-order/' + orderId]);
   }
   public deleteOrder(order: Order) {
-    this.orederService.deleteOrder(order).subscribe((res) => {
+    this.dialog.open(ConfirmationDialogComponent, {
+      data: {message: 'Da li ste sigurni da želite da izbrišete porudžbinu ?'},
+      disableClose: true
+    }).afterClosed().subscribe((res) => {
       console.log(res);
-      this.initTable();
-    }
-    ,(error) => {
-      console.log(error);
+      if (res) {
+        this.orederService.deleteOrder(order).subscribe((result) => {
+          console.log(result);
+          this.initTable();
+        }
+        , (error) => {
+          console.log(error);
+        }
+        );
+      }
     }
     );
   }

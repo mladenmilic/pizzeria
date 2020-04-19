@@ -35,7 +35,7 @@
                     <mat-error>Polje je obavezno</mat-error>
               </mat-form-field>
               <div style="margin-top: 1.5%" class="col-md-5">
-                  <button [disabled]="!newOrderFormGroup.valid" style="width: 20vh;" class="btn btn-primary btn-sm" (click)="addPizza()" >Dodaj picu</button>
+                  <button  style="width: 20vh;" class="btn btn-primary btn-sm" (click)="addPizza()" >Dodaj picu</button>
               </div>
           </div>
           <div  [hidden]="dataSource.data.length == 0" class="row">
@@ -51,7 +51,7 @@
                   </ng-container>
                   <ng-container matColumnDef="nazivPice">
                     <th mat-header-cell *matHeaderCellDef> Naziv pice </th>
-                    <td mat-cell *matCellDef="let element"> {{element.pizzaName}} </td>
+                    <td mat-cell *matCellDef="let element"> {{ element.pizza ? (element.pizza.pizzaName ? element.pizza.pizzaName : element.pizzaName) : element.pizzaName}} </td>
                   </ng-container>
                   <ng-container matColumnDef="kolicina">
                     <th mat-header-cell *matHeaderCellDef> Količina </th>

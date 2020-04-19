@@ -1,7 +1,7 @@
 <mat-toolbar *ngIf="user"><span class="title-center">Zaposleni: {{user.fullName}}</span></mat-toolbar>
   <form [formGroup] = "newOrderFormGroup">
     <div class=" container row">
-      <mat-card *ngIf="user" class="col-md-12">
+      <mat-card [hidden] ="!user" class="col-md-12">
         <mat-card-header style="margin-bottom: 3%" class="row">
             <h4 class=" text-center">Pregled porudžbine</h4>
         </mat-card-header>
@@ -24,7 +24,7 @@
           <mat-card-header  *ngIf = "dataSource.data.length > 0" style="margin-top: 3%" class="row">
               <h4 class=" text-center">Stavke porudžbine</h4>
           </mat-card-header>
-          <div *ngIf = "dataSource.data.length > 0" class="row">
+          <div [hidden] = "dataSource.data.length === 0" class="row">
               <table #table  class="col-md-12" mat-table [dataSource]="dataSource">
                   <ng-container matColumnDef="redniBroj">
                     <th  mat-header-cell *matHeaderCellDef>Redni broj stavke</th>

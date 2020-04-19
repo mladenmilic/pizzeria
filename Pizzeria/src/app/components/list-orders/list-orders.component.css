@@ -11,3 +11,7 @@
 table {
   width: 100%;
 }
+.center-img {
+  margin: 0 auto;
+  height: 65vh;
+}

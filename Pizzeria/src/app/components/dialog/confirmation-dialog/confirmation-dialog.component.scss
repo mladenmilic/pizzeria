@@ -1,0 +1,43 @@
+.centered {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.container {
+  width: 1000px;
+  height: 400px;
+}
+
+.dialog-bg {
+  width: 1000px;
+  position: relative;
+}
+
+.message {
+  font-size: 40px;
+  text-align: center;
+  width: 1000px;
+  color: #b09965 !important;
+}
+
+.btn-uppercase {
+  text-transform: uppercase;
+}
+.dialog-actions {
+  height: 10vh;
+  padding: 0;
+  position: relative;
+  margin-left: 0;
+  margin-right: 0;
+  .float-left {
+      position: absolute;
+      bottom: 2vh;
+      left: 50px;
+  }
+  .float-right {
+      position: absolute;
+      bottom: 2vh;
+      right: 25px;
+  }
+}

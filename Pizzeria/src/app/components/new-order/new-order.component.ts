@@ -1,5 +1,5 @@
 import { UserService } from 'app/services/user..service';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnChanges } from '@angular/core';
 import { User } from 'app/model/user';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatTableDataSource, MatPaginator, MatTable } from '@angular/material';
@@ -14,6 +14,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import * as jwt_decode from 'jwt-decode';
 import { toUnicode } from 'punycode';
+import { element } from 'protractor';
 
 @Component({
   selector: 'app-new-order',
@@ -25,8 +26,8 @@ export class NewOrderComponent implements OnInit {
   public newOrderFormGroup: FormGroup;
   public displayedColumns: string[] = ['redniBroj', 'nazivPice', 'kolicina', 'cena', 'iznos', 'akcija'];
   public dataSource: any;
-  public listPlace: Place [];
-  public listPizza: Pizza [];
+  public listPlace: Place [] = [];
+  public listPizza: Pizza [] = [];
   public listOrderItems: OrderItems [] = new Array();
   public totalAmout = 0;
   public itemId = 0;
@@ -53,14 +54,12 @@ export class NewOrderComponent implements OnInit {
     this.dataSource =  new MatTableDataSource<any>(this.listOrderItems);
     this.dataSource.paginator = this.paginator;
     this.fillSelectField();
-    // tslint:disable-next-line: no-bitwise
-    //this.orderId = Math.random() * 1000000000 | 0;
     this.newOrderFormGroup = new FormGroup({
       street: new FormControl('', [Validators.required]),
       place: new FormControl('', [Validators.required]),
       mobileNumber: new FormControl('', [Validators.required]),
       pizza: new FormControl('', [Validators.required]),
-      itemId: new FormControl('', [])
+      itemId: new FormControl('')
     });
     this.id = +this.router.snapshot.paramMap.get('id');
     if (this.id > 0) {
@@ -68,17 +67,13 @@ export class NewOrderComponent implements OnInit {
     }
   }
 
-
-
   public createOrder() {
      const order = {
        orderId: this.orderId,
        date: new Date(),
        orderItems: this.listOrderItems,
        phoneNumber: this.newOrderFormGroup.controls.mobileNumber.value,
-       //place: this.newOrderFormGroup.controls.place.value,
        street: this.newOrderFormGroup.controls.street.value,
-       //user: this.user,
        totalAmount: this.totalAmout,
        userId: this.user.userId,
        placezipCode: (this.newOrderFormGroup.controls.place.value).zipCode
@@ -101,7 +96,7 @@ export class NewOrderComponent implements OnInit {
       price: pizza.price,
       amount: quantity * pizza.price,
       pizzaName: pizza.pizzaName,
-      pizzaId:pizza.pizzaId
+      pizzaId: pizza.pizzaId
     };
     if (this.listOrderItems.length > 0) {
       const a = this.listOrderItems.find((element) => {
@@ -117,7 +112,6 @@ export class NewOrderComponent implements OnInit {
           }
         });
       } else {
-         //++this.itemId;
          orderItem.itemId = 0;
          this.listOrderItems.push(orderItem);
          this.totalAmout += pizza.price;
@@ -146,12 +140,12 @@ export class NewOrderComponent implements OnInit {
       date: new Date(),
       orderItems: this.listOrderItems,
       phoneNumber: this.newOrderFormGroup.controls.mobileNumber.value,
-      place: this.newOrderFormGroup.controls.place.value,
+      //place: this.newOrderFormGroup.controls.place.value,
       street: this.newOrderFormGroup.controls.street.value,
-      user: this.user,
+      //user: this.user,
       totalAmount: this.totalAmout,
       userId: this.user.userId,
-      placezipCode:(this.newOrderFormGroup.controls.place.value).zipCode
+      placezipCode: (this.newOrderFormGroup.controls.place.value).zipCode
     }
     console.log(order);
     this.oredrService.updateOrder(order).subscribe((res) => {
@@ -164,22 +158,40 @@ export class NewOrderComponent implements OnInit {
     this.oredrService.getOrder(this.id).subscribe((res) => {
       const order: Order = res;
       this.totalAmout = order.totalAmount;
-      this.listOrderItems = order.orderItems;
+      this.listOrderItems = this.fixOrderItems(order.orderItems);
       this.dataSource = new MatTableDataSource<any>(this.listOrderItems);
       this.dataSource.paginator = this.paginator;
       this.newOrderFormGroup.controls.place.setValue(this.listPlace.find(i => i.zipCode === order.place.zipCode));
       this.newOrderFormGroup.controls.street.setValue(order.street);
       this.newOrderFormGroup.controls.mobileNumber.setValue(order.phoneNumber);
+      this.dataSource._updateChangeSubscription();
     });
+  }
+  private fixOrderItems(listOrderItems: OrderItems []) {
+    const listItemOrders = [];
+    listOrderItems.forEach((element: any) => {
+      console.log(element);
+      const orderItem: OrderItems = {
+        itemId: element.itemId,
+        orderId: element.orderId,
+        quantity: element.quantity,
+        price: element.price,
+        amount: element.amount,
+        pizzaName: element.pizza.pizzaName,
+        pizzaId: element.pizzaId
+      }
+      listItemOrders.push(orderItem);
+    });
+    return listItemOrders;
   }
   private fixListOrderItems(listOrderItems: OrderItems []) {
    if(listOrderItems.length === 1) {
-     listOrderItems[0].itemId = 1;
-     this.itemId = 1;
+     listOrderItems[0].itemId = 0;
+     this.itemId = 0;
      return listOrderItems;
    }
    if(!listOrderItems) {
-     this.itemId = 1;
+     this.itemId = 0;
      return new Array ();
    }
    // tslint:disable-next-line:prefer-for-of

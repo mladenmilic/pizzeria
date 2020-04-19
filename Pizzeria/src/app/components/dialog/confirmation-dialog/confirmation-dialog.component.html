@@ -1,1 +1,12 @@
-<p>confirmation-dialog works!</p>
+
+<div mat-dialog-content>
+  <div class="container centered">
+    <div class="dialog-bg">
+      <div class="message">{{ data.message }}</div>
+    </div>
+  </div>
+</div>
+<div class="dialog-actions" mat-dialog-actions>
+  <button mat-raised-button (click) = "confirmation()" class="float-left">DA</button>
+  <button mat-raised-button (click) = "close()" class="float-right">NE</button>
+</div>

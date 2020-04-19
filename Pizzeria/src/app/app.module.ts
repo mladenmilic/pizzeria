@@ -34,6 +34,7 @@ import { ErrorDialogComponent } from './components/dialog/error-dialog/error-dia
 import { ConfirmationDialogComponent } from './components/dialog/confirmation-dialog/confirmation-dialog.component';
 import {MatDialogModule} from '@angular/material/dialog';
 import {NgxSpinnerModule} from 'ngx-spinner';
+import { MessageDialogComponent } from './components/dialog/message-dialog/message-dialog.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -47,7 +48,8 @@ import {NgxSpinnerModule} from 'ngx-spinner';
     OverviewOrderComponent,
     InformationDialogComponent,
     ErrorDialogComponent,
-    ConfirmationDialogComponent
+    ConfirmationDialogComponent,
+    MessageDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -73,7 +75,8 @@ import {NgxSpinnerModule} from 'ngx-spinner';
   entryComponents: [
     InformationDialogComponent,
     ErrorDialogComponent,
-    ConfirmationDialogComponent
+    ConfirmationDialogComponent,
+    MessageDialogComponent
   ],
   providers: [
     DatePipe,

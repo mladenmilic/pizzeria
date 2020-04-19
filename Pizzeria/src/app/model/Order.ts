@@ -9,8 +9,8 @@ export class Order {
   public placezipCode: number;
   public userId: number;
   public street: string;
-  public place: Place;
+  public place?: Place;
   public phoneNumber: string;
-  public user: User;
+  public user?: User;
   public orderItems: OrderItems [];
 }
