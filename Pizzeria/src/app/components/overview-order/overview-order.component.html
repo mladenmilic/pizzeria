@@ -2,7 +2,7 @@
   <form [formGroup] = "newOrderFormGroup">
     <div class=" container row">
       <mat-card [hidden] ="!user" class="col-md-12">
-        <mat-card-header style="margin-bottom: 3%" class="row">
+        <mat-card-header class="row">
             <h4 class=" text-center">Pregled porudžbine</h4>
         </mat-card-header>
         <div class="row">
@@ -21,7 +21,7 @@
                 <input readonly matInput [value]="totalAmout" placeholder="Ukupan iznos">
               </mat-form-field>
           </div>
-          <mat-card-header  *ngIf = "dataSource.data.length > 0" style="margin-top: 3%" class="row">
+          <mat-card-header  *ngIf = "dataSource.data.length > 0" class="row">
               <h4 class=" text-center">Stavke porudžbine</h4>
           </mat-card-header>
           <div [hidden] = "dataSource.data.length === 0" class="row">
