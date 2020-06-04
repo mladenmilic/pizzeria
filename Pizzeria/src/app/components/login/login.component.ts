@@ -50,7 +50,7 @@ export class LoginComponent implements OnInit {
         localStorage.setItem('token', currentUser.token);
         console.log(localStorage.getItem('token'));
         // tslint:disable-next-line:only-arrow-functions
-        this.closeInformationDialog(this.openDialog);
+        this.closeInformationDialog(this.openDialog, this.spinner);
         this.route.navigate(['/home']);
       }
     },
@@ -63,11 +63,11 @@ export class LoginComponent implements OnInit {
       console.log(err.error.message);
     });
   }
-  private closeInformationDialog(dialog: any) {
+  private closeInformationDialog(dialog: any, spinner: any) {
     // tslint:disable-next-line:only-arrow-functions
     setTimeout(function() {
       dialog.close();
-      this.spinner.hide();
+      spinner.hide();
     }, 500);
   }
 }

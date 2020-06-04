@@ -2,12 +2,15 @@ import { FormGroup, FormControl } from '@angular/forms';
 import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { User } from 'app/model/user';
 import { Pizza } from 'app/model/Pizza';
-import { MatPaginator, MatTableDataSource, MatTable } from '@angular/material';
+import { MatPaginator, MatTableDataSource, MatTable, MatDialog } from '@angular/material';
 import { UserService } from 'app/services/user..service';
 import { PizzaService } from 'app/services/pizza.service';
 import { Router } from '@angular/router';
 import * as jwt_decode from 'jwt-decode';
 import { isNumber } from 'util';
+import { ErrorDialogComponent } from '../dialog/error-dialog/error-dialog.component';
+import { ConfirmationDialogComponent } from '../dialog/confirmation-dialog/confirmation-dialog.component';
+import { InformationDialogComponent } from '../dialog/information-dialog/information-dialog.component';
 @Component({
   selector: 'app-review-offers',
   templateUrl: './review-offers.component.html',
@@ -24,7 +27,8 @@ export class ReviewOffersComponent implements OnInit {
   constructor(
      protected userService: UserService,
      protected pizzaService: PizzaService,
-     protected route: Router
+     protected route: Router,
+     protected dialog: MatDialog
      ) { }
 
   ngOnInit() {
@@ -47,23 +51,38 @@ export class ReviewOffersComponent implements OnInit {
       if(res.length > 0) {
         this.listPizza = res;
       } else {
-        this.listPizza.push(res);
+        this.dialog.open(ErrorDialogComponent, {data: {
+          message: 'Nije pronađena nijedna ponuda po zadatim cenama !'
+        }, disableClose: true});
       }
       this.dataSource = new MatTableDataSource<any>(this.listPizza);
       this.dataSource.paginator = this.paginator;
     },
     (err) => {
-      console.log(err);
+      this.dialog.open(ErrorDialogComponent, {data: {
+        message: err.error.message
+      }, disableClose: true});
     });
     this.pizzaFormGroup.controls.priceTo.setValue(null);
     this.pizzaFormGroup.controls.priceFrom.setValue(null);
   }
   public deletOffer(element: Pizza) {
-    this.pizzaService.deletePizza(element).subscribe((res) => {
-      console.log(res);
-      this.pizzaService.getListPizza().subscribe((res) => {
-        this.dataSource.data = res;
-      });
+    this.dialog.open(ConfirmationDialogComponent, {
+      data: {message: 'Da li ste sigurni da želite da izbrišete ponudu ?'},
+      disableClose: true
+    }).afterClosed().subscribe((res) => {
+      if (res) {
+        const openDialog = this.dialog.open(InformationDialogComponent, {data:
+          {message: 'Brisanje ponude...'},
+           disableClose: true});
+        this.pizzaService.deletePizza(element).subscribe((result) => {
+          console.log(res);
+          this.pizzaService.getListPizza().subscribe((list) => {
+            this.dataSource.data = list;
+            openDialog.close();
+          });
+        });
+      }
     });
   }
   public back() {

@@ -18,4 +18,8 @@ export class InformationDialogComponent implements OnInit {
     this.spinner.show();
   }
 
+  public closeDialog() {
+    this.dialogRef.close();
+  }
+
 }

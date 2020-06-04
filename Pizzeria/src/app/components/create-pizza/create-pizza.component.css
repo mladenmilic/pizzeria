@@ -1,8 +1,5 @@
 .container {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translateX(-50%) translateY(-50%);
+  margin: 5vh auto;
 }
 .title-center {
   flex: 1 1 auto;

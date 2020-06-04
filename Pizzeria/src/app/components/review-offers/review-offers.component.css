@@ -1,8 +1,6 @@
 .container{
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translateX(-50%) translateY(-50%);
+  margin: 20px auto;
+  width: 80%;
   height:76vh;
 }
 .title-center {

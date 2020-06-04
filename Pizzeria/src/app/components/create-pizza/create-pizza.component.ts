@@ -6,6 +6,8 @@ import { UserService } from 'app/services/user..service';
 import { PizzaService } from 'app/services/pizza.service';
 import { User } from 'app/model/user';
 import * as jwt_decode from 'jwt-decode';
+import { MatDialog } from '@angular/material';
+import { InformationDialogComponent } from '../dialog/information-dialog/information-dialog.component';
 @Component({
   selector: 'app-create-pizza',
   templateUrl: './create-pizza.component.html',
@@ -23,6 +25,7 @@ export class CreatePizzaComponent implements OnInit {
      protected pizzaService: PizzaService,
      protected router: Router,
      protected route: ActivatedRoute,
+     protected dialog: MatDialog
       ) { }
 
   ngOnInit() {
@@ -44,10 +47,14 @@ export class CreatePizzaComponent implements OnInit {
       pizzaName: this.createPizzaFormGroup.controls.pizzaName.value,
       description: this.createPizzaFormGroup.controls.description.value,
       price: this.createPizzaFormGroup.controls.price.value
-    }
+    };
+    const openDialog = this.dialog.open(InformationDialogComponent, {data:
+      {message: 'Kreiranje ponude...'},
+       disableClose: true});
     this.pizzaService.createPizza(pizza).subscribe((res) => {
       console.log(res);
       this.router.navigate(['/review-offers']);
+      openDialog.close();
     });
   }
   public populateAndChangeForm() {
@@ -65,10 +72,14 @@ export class CreatePizzaComponent implements OnInit {
       pizzaName: this.createPizzaFormGroup.controls.pizzaName.value,
       description: this.createPizzaFormGroup.controls.description.value,
       price: this.createPizzaFormGroup.controls.price.value
-    }
+    };
+    const openDialog = this.dialog.open(InformationDialogComponent, {data:
+      {message: 'Ažuriranje ponude...'},
+       disableClose: true});
     this.pizzaService.updatePizza(pizza).subscribe((res) => {
       console.log(res);
       this.router.navigate(['/review-offers']);
+      openDialog.close();
     });
   }
   private findUser() {

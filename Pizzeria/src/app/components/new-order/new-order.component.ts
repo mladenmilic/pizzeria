@@ -1,8 +1,10 @@
+import { ErrorDialogComponent } from './../dialog/error-dialog/error-dialog.component';
+import { InformationDialogComponent } from './../dialog/information-dialog/information-dialog.component';
 import { UserService } from 'app/services/user..service';
 import { Component, OnInit, ViewChild, OnChanges } from '@angular/core';
 import { User } from 'app/model/user';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { MatTableDataSource, MatPaginator, MatTable } from '@angular/material';
+import { MatTableDataSource, MatPaginator, MatTable, MatDialog } from '@angular/material';
 import { PlaceService } from 'app/services/place.service';
 import { PizzaService } from 'app/services/pizza.service';
 import { Place } from 'app/model/Place';
@@ -13,8 +15,7 @@ import { OrderService } from 'app/services/order.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import * as jwt_decode from 'jwt-decode';
-import { toUnicode } from 'punycode';
-import { element } from 'protractor';
+
 
 @Component({
   selector: 'app-new-order',
@@ -44,7 +45,8 @@ export class NewOrderComponent implements OnInit {
     protected oredrService: OrderService,
     protected route: Router,
     protected datePipe: DatePipe,
-    protected router: ActivatedRoute
+    protected router: ActivatedRoute,
+    protected dialog: MatDialog,
     ) {
 
   }
@@ -78,11 +80,28 @@ export class NewOrderComponent implements OnInit {
        userId: this.user.userId,
        placezipCode: (this.newOrderFormGroup.controls.place.value).zipCode
      }
+     const openDialog = this.dialog.open(InformationDialogComponent, {data:
+      {message: 'Kreiranje porudzbine...'},
+       disableClose: true});
      console.log(order);
      this.oredrService.addOrder(order).subscribe((res) => {
-       console.log(res);
-       this.route.navigate(['/list-orders']);
-     });
+       if (res) {
+        this.route.navigate(['/list-orders']);
+        openDialog.close();
+       } else {
+         openDialog.close();
+         this.dialog.open(ErrorDialogComponent, {data: {
+           message: 'Porudzbina nije kreirana!'
+         }, disableClose: true});
+       }
+     },
+     (err) => {
+       this.dialog.open(ErrorDialogComponent,{data: {
+        message: err.error.message
+       },
+       disableClose: true});
+     }
+     );
   }
   public addPizza() {
     const quantity = this.quantity;
@@ -140,17 +159,32 @@ export class NewOrderComponent implements OnInit {
       date: new Date(),
       orderItems: this.listOrderItems,
       phoneNumber: this.newOrderFormGroup.controls.mobileNumber.value,
-      //place: this.newOrderFormGroup.controls.place.value,
       street: this.newOrderFormGroup.controls.street.value,
-      //user: this.user,
       totalAmount: this.totalAmout,
       userId: this.user.userId,
       placezipCode: (this.newOrderFormGroup.controls.place.value).zipCode
     }
     console.log(order);
+    const openDialog = this.dialog.open(InformationDialogComponent, {data:
+      {message: 'Izmena porudzbine...'},
+       disableClose: true});
     this.oredrService.updateOrder(order).subscribe((res) => {
-      console.log(res);
-      this.route.navigate(['/list-orders']);
+      if (res) {
+        this.route.navigate(['/list-orders']);
+        openDialog.close();
+       } else {
+         openDialog.close();
+         this.dialog.open(ErrorDialogComponent, {data: {
+           message: 'Porudzbina nije izmenjena!'
+         }, disableClose: true});
+       }
+    },
+    (err) => {
+      openDialog.close();
+      this.dialog.open(ErrorDialogComponent, {data: {
+        message: err.error.message
+       },
+       disableClose: true});
     });
   }
   private changeAndPopulateForm() {
@@ -172,7 +206,7 @@ export class NewOrderComponent implements OnInit {
     listOrderItems.forEach((element: any) => {
       console.log(element);
       const orderItem: OrderItems = {
-        itemId: element.itemId,
+        itemId: 0,
         orderId: element.orderId,
         quantity: element.quantity,
         price: element.price,
@@ -212,10 +246,36 @@ export class NewOrderComponent implements OnInit {
   }
   private fillSelectField() {
     this.placeService.getListPlace().subscribe((res) => {
-      this.listPlace = res;
+      if (res.length > 0) {
+        this.listPlace = res;
+      } else {
+        this.dialog.open(ErrorDialogComponent, {data: {
+          message: 'Nije učitana lista mesta !'
+         },
+         disableClose: true});
+      }
+    },
+    (err) => {
+      this.dialog.open(ErrorDialogComponent, {data: {
+        message: err.error.message
+       },
+       disableClose: true});
     });
     this.pizzaService.getListPizza().subscribe((res) => {
-      this.listPizza = res;
+      if (res.length > 0) {
+        this.listPizza = res;
+      } else {
+        this.dialog.open(ErrorDialogComponent, {data: {
+          message: 'Nije učitana lista pica !'
+         },
+         disableClose: true});
+      }
+    },
+    (err) => {
+      this.dialog.open(ErrorDialogComponent, {data: {
+        message: err.error.message
+       },
+       disableClose: true});
     });
   }
 

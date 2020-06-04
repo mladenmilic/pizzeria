@@ -10,6 +10,8 @@ import { DatePipe} from '@angular/common';
 import { Router } from '@angular/router';
 import * as jwt_decode from 'jwt-decode';
 import * as moment from 'moment';
+import { ErrorDialogComponent } from '../dialog/error-dialog/error-dialog.component';
+import { InformationDialogComponent } from '../dialog/information-dialog/information-dialog.component';
 @Component({
   selector: 'app-list-orders',
   templateUrl: './list-orders.component.html',
@@ -53,17 +55,20 @@ export class ListOrdersComponent implements OnInit , AfterViewInit{
     console.log(dateFrom, dateTo);
     this.orederService.filterByDate(dateFrom, dateTo).subscribe((res) =>{
       console.log(res);
-      this.listOrders = new Array();
       if(res.length > 0) {
         this.listOrders = res;
       } else {
-        this.listOrders.push(res);
+        this.dialog.open(ErrorDialogComponent, {data: {
+          message: 'Nije pronađena nijedna porudžbina po zadatim datumima !'
+        }, disableClose: true});
       }
       this.dataSource = new MatTableDataSource<any>(this.listOrders);
       this.dataSource.paginator = this.paginator;
     },
     (err) => {
-      console.log(err);
+      this.dialog.open(ErrorDialogComponent, {data: {
+        message: err.error.message
+      }, disableClose: true});
     });
     this.newOrderFormGroup.controls.dateTo.setValue(null);
     this.newOrderFormGroup.controls.dateFrom.setValue(null);
@@ -82,7 +87,10 @@ export class ListOrdersComponent implements OnInit , AfterViewInit{
       this.dataSource.paginator = this.paginator;
     },
     (err) => {
-      console.log(err);
+      console.log(err.error.message);
+      this.dialog.open(ErrorDialogComponent, {data: {
+        message: err.error.message
+      }, disableClose: true});
     });
   }
 
@@ -99,13 +107,19 @@ export class ListOrdersComponent implements OnInit , AfterViewInit{
     }).afterClosed().subscribe((res) => {
       console.log(res);
       if (res) {
+        const openDialog = this.dialog.open(InformationDialogComponent, {data:
+          {message: 'Brisanje porudžbine...'},
+           disableClose: true});
         this.orederService.deleteOrder(order).subscribe((result) => {
           console.log(result);
           this.initTable();
+          openDialog.close();
         }
         , (error) => {
-          console.log(error);
-        }
+          this.dialog.open(ErrorDialogComponent,{data: {
+            message: error.error.message
+           },
+           disableClose: true});        }
         );
       }
     }

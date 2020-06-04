@@ -1,4 +1,4 @@
-<div [hidden]="!user">
+<div [hidden]="!newOrderFormGroup">
 <mat-toolbar *ngIf="user"><button routerLink="/home" mat-button><img src="../../../assets/icons8-go-back-64.png"/></button><span class="title-center">Zaposleni: {{user.fullName}}</span></mat-toolbar>
   <form [formGroup] = "newOrderFormGroup">
     <div [ngStyle]="{top: dataSource.data.length == 0 ? '40%' : '55%'}" class=" container row">
@@ -39,7 +39,7 @@
               </div>
           </div>
           <div  [hidden]="dataSource.data.length == 0" class="row">
-              <mat-card-header style="margin-top: 3%" class="row">
+              <mat-card-header style="margin-top: 0.5vh" class="row">
                   <h4 class=" text-center">Stavke porudžbine</h4>
               </mat-card-header>
               <table [hidden]="dataSource.data.length == 0"  class="col-md-12" mat-table [dataSource]="dataSource">
@@ -85,7 +85,7 @@
           <mat-card-actions class="row">
             <button [hidden]="id !==0" [disabled]="!newOrderFormGroup.valid || dataSource.data.length == 0" class=" col-md-2 btn btn-primary btn-sm" (click)="createOrder()">Kreiraj porudžbinu</button>
             <button [hidden]="id == 0 " [disabled]="dataSource.data.length == 0" class=" col-md-2 btn btn-primary btn-sm" (click)="updateOrder()">Izmeni porudžbinu</button>
-            <button  routerLink="/home" style="float: right;" class="col-md-2 btn btn-secondary btn-sm">Odustani</button>
+            <button  routerLink="/list-orders" style="float: right;" class="col-md-2 btn btn-secondary btn-sm">Odustani</button>
           </mat-card-actions>
       </mat-card>
     </div>
