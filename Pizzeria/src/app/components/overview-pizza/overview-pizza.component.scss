@@ -1,0 +1,23 @@
+.container {
+  margin: 5vh auto;
+}
+.title-center {
+  flex: 1 1 auto;
+  text-align: right;
+}
+table {
+  width: 100%;
+}
+.action {
+  display: flex;
+  justify-content: space-between;
+  *{
+    width: 150px;
+  }
+}
+.pizza-name-price {
+  display: flex;
+  justify-content: space-between;
+  width: 400px;
+  margin-top: 3vh;
+}
