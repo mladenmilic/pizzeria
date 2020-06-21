@@ -1,3 +1,5 @@
+import { ErrorDialogComponent } from './../dialog/error-dialog/error-dialog.component';
+import { MessageDialogComponent } from './../dialog/message-dialog/message-dialog.component';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Pizza } from 'app/model/Pizza';
 import { FormGroup, Validators, FormControl } from '@angular/forms';
@@ -23,6 +25,7 @@ export class CreatePizzaComponent implements OnInit {
   public pizza: Pizza;
   public dataSource: any;
   public displayedColumns: string[] = ['redniBroj', 'imeSastojka', 'kolicina', 'akcija'];
+  public listPizza: Pizza [] = [];
   public listPizzaCompoments: PizzaComponents [] = new Array();
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatTable, { static: false }) public table: MatTable<any>;
@@ -36,6 +39,7 @@ export class CreatePizzaComponent implements OnInit {
 
   ngOnInit() {
     this.findUser();
+    this.getListPizza();
     this.dataSource =  new MatTableDataSource<any>(this.listPizzaCompoments);
     this.dataSource.paginator = this.paginator;
     this.createPizzaFormGroup = new FormGroup({
@@ -82,14 +86,18 @@ export class CreatePizzaComponent implements OnInit {
       pizzaComponents: this.listPizzaCompoments,
       price: this.createPizzaFormGroup.controls.price.value
     };
-    const openDialog = this.dialog.open(InformationDialogComponent, {data:
-      {message: 'Kreiranje ponude...'},
-       disableClose: true});
-    this.pizzaService.createPizza(pizza).subscribe((res) => {
-      console.log(res);
-      this.router.navigate(['/review-offers']);
-      openDialog.close();
-    });
+    if (this.pizzaExist(pizza)) {
+      this.dialog.open(ErrorDialogComponent, {data: {message: 'Pizza već postoji u sistemu'}, disableClose: true});
+    } else {
+      const openDialog = this.dialog.open(InformationDialogComponent, {data:
+        {message: 'Kreiranje ponude...'},
+        disableClose: true});
+      this.pizzaService.createPizza(pizza).subscribe((res) => {
+       console.log(res);
+       this.router.navigate(['/review-offers']);
+       openDialog.close();
+     });
+    }
   }
   public populateAndChangeForm() {
     this.title = 'Promena ponude';
@@ -121,5 +129,20 @@ export class CreatePizzaComponent implements OnInit {
   }
   private findUser() {
     this.user = jwt_decode(localStorage.getItem('token'));
+  }
+  private getListPizza() {
+    this.pizzaService.getListPizza().subscribe((res: Pizza []) => {
+      this.listPizza = res;
+    });
+  }
+  private pizzaExist(pizza: Pizza) {
+    let exist = false;
+    this.listPizza.forEach((p: Pizza) => {
+        if (p.pizzaName.toUpperCase() === pizza.pizzaName.toUpperCase()) {
+          exist = true;
+          return exist;
+        }
+    });
+    return exist;
   }
 }
