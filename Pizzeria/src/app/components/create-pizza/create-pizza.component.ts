@@ -62,6 +62,7 @@ export class CreatePizzaComponent implements OnInit {
       quantity: this.createPizzaFormGroup.controls.quantity.value
     };
     if (pizzaComponents.componentsName && pizzaComponents.quantity) {
+      this.componentsExist(pizzaComponents);
       this.listPizzaCompoments.push(pizzaComponents);
       console.log(this.listPizzaCompoments);
       this.dataSource = new MatTableDataSource<any>(this.listPizzaCompoments);
@@ -135,6 +136,7 @@ export class CreatePizzaComponent implements OnInit {
       this.listPizza = res;
     });
   }
+
   private pizzaExist(pizza: Pizza) {
     let exist = false;
     this.listPizza.forEach((p: Pizza) => {
@@ -144,5 +146,15 @@ export class CreatePizzaComponent implements OnInit {
         }
     });
     return exist;
+  }
+
+  private componentsExist(pizzaComponents: PizzaComponents) {
+    this.listPizzaCompoments.forEach((pc: PizzaComponents) => {
+      if(pc.componentsName.toUpperCase() === pizzaComponents.componentsName.toUpperCase()) {
+        const sum1 = parseInt(pc.quantity.split(' ')[0], 10);
+        const sum2 = parseInt(pizzaComponents.quantity.split(' ')[0], 10);
+        pc.quantity = sum1 + sum2 + ' ' + pc.quantity.split(' ')[1];
+      }
+    });
   }
 }
